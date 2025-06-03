@@ -516,12 +516,12 @@ document.getElementById("modoEdicionFicha").onclick = () => {
     selectTurno.id = "turnoEdit";
   
     const turnos = [
-      "Lunes 14:30 a 16:00", "Lunes 16:30 a 18:00", "Lunes 18:30 a 20:00",
-      "Martes 09:30 a 11:00", "Martes 16:30 a 18:00", "Martes 18:30 a 20:00",
-      "Miércoles 16:30 a 18:00", "Miércoles 18:30 a 20:00",
-      "Jueves 14:30 a 16:00", "Jueves 16:30 a 18:00", "Jueves 18:30 a 20:00",
-      "Viernes 14:30 a 16:00", "Viernes 16:30 a 18:00", "Viernes 18:30 a 20:00",
-      "Sábado 09:00 a 10:30", "Sábado 11:00 a 12:30"
+      "Lunes 14:30 a 16:00hs", "Lunes 16:30 a 18:00hs", "Lunes 18:30 a 20:00hs",
+      "Martes 09:30 a 11:00hs", "Martes 16:30 a 18:00hs", "Martes 18:30 a 20:00hs",
+      "Miércoles 16:30 a 18:00hs", "Miércoles 18:30 a 20:00hs",
+      "Jueves 14:30 a 16:00hs", "Jueves 16:30 a 18:00hs", "Jueves 18:30 a 20:00hs",
+      "Viernes 14:30 a 16:00hs", "Viernes 16:30 a 18:00hs", "Viernes 18:30 a 20:00hs",
+      "Sábado 09:00 a 10:30hs", "Sábado 11:00 a 12:30hs"
     ];
     turnos.forEach(t => {
       const opt = new Option(t, t, false, t === turnoActual);
