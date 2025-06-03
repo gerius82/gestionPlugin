@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Asistencias</title>
+  
+  <link rel="stylesheet" href="asistencias.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Registro de Asistencia</h2>
+
+    <div class="filtros">
+      <label for="sede">Sede:</label>
+      <select id="sede">
+        <option value="">-- Seleccionar sede --</option>
+        <option value="Calle Mendoza">Calle Mendoza</option>
+        <option value="Fisherton">Fisherton</option>
+      </select>
+
+      <label for="fecha">Fecha de registro:</label>
+        <input type="date" id="fecha" />
+
+
+      <label for="dia">Día:</label>
+      <select id="dia">
+        <option value="">-- Seleccionar día --</option>
+        <option value="Lunes">Lunes</option>
+        <option value="Martes">Martes</option>
+        <option value="Miércoles">Miércoles</option>
+        <option value="Jueves">Jueves</option>
+        <option value="Viernes">Viernes</option>
+        <option value="Sábado">Sábado</option>
+      </select>
+
+      <label for="horario">Horario:</label>
+      <select id="horario">
+        <option value="">-- Seleccionar horario --</option>
+        <option value="09:00 a 10:30">09:00 a 10:30</option>
+        <option value="09:30 a 11:00">09:30 a 11:00</option>
+        <option value="11:00 a 12:30">11:00 a 12:30</option>
+        <option value="14:30 a 16:00">14:30 a 16:00</option>
+        <option value="16:30 a 18:00">16:30 a 18:00</option>
+        <option value="18:30 a 20:00">18:30 a 20:00</option>
+      </select>
+
+      <button id="buscar" disabled>Buscar alumnos</button>
+      <button id="volverMenu" class="btn-volver">← Volver al Menú</button>
+
+      
+      
+    </div>
+
+    <div id="asistenciaContainer" style="display:none;">
+      <h3>Alumnos asignados</h3>
+      <form id="formAsistencia">
+        <ul id="listaAlumnos"></ul>
+
+        <h4>Recuperadores</h4>
+        <select id="recuperador">
+          <option value="">-- Seleccionar alumno para agregar como recuperador --</option>
+        </select>
+        <ul id="listaRecuperadores"></ul>
+
+        <button type="submit">Guardar asistencia</button>
+      </form>
+    </div>
+  </div>
+  
+  
+
+  <script src="asistencias.js"></script>
+</body>
+</html>

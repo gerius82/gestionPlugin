@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aviso de Pago</title>
+  <link rel="stylesheet" href="pago.css">
+
+</head>
+<body>
+  <div class="container">
+    <h2>Aviso de Pago</h2>
+
+    <form id="formPago">
+      <label for="alumno">Seleccionar Alumno:</label>
+      <select id="alumno">
+        <option value="">Seleccioná un alumno</option>
+      </select>
+
+      <div class="checkbox-linea">
+        <input type="checkbox" id="pagaMes" />
+        <label for="pagaMes">Paga mes</label>
+      </div>
+
+      <div id="mesPagoContainer" style="display: none;">
+        <label for="mes">Mes a pagar:</label>
+        <select id="mes">
+          <option value="Enero">Enero</option>
+          <option value="Febrero">Febrero</option>
+          <option value="Marzo">Marzo</option>
+          <option value="Abril">Abril</option>
+          <option value="Mayo">Mayo</option>
+          <option value="Junio">Junio</option>
+          <option value="Julio">Julio</option>
+          <option value="Agosto">Agosto</option>
+          <option value="Septiembre">Septiembre</option>
+          <option value="Octubre">Octubre</option>
+          <option value="Noviembre">Noviembre</option>
+          <option value="Diciembre">Diciembre</option>
+        </select>
+      </div>
+
+      <div class="checkbox-linea">
+        <input type="checkbox" id="pagaInscripcion" />
+        <label for="pagaInscripcion">Paga inscripción</label>
+      </div>
+
+      <div class="checkbox-linea" id="promoInfo" style="margin-top: 0.5rem;">
+        <label for="tienePromo">Tiene promo (Hermanos o Mejores Amigos):</label>
+        <input type="checkbox" id="tienePromo" disabled />
+      </div>
+
+      <div class="radio-group">
+        <label><input type="radio" name="medioPago" value="efectivo" checked /> Pago en efectivo</label>
+        <label><input type="radio" name="medioPago" value="transferencia" /> Pago por transferencia</label>
+      </div>
+
+      <div id="total" class="total">
+        <strong>Total: <span id="totalValor">0</span></strong>
+      </div>
+
+      <div id="confirmacionPago">
+        ¡Pago registrado con éxito!
+      </div>
+      
+      <button type="submit" class="btn-verde">Registrar Pago</button>
+    </form>
+
+    <button id="volverMenu" class="btn-volver">← Volver al Menú</button>
+    
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <script src="pago.js"></script>
+</body>
+</html>
