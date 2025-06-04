@@ -180,14 +180,14 @@ document.getElementById("volverMenu").onclick = () => {
   window.location.href = "index.html"; // Cambiar si el archivo se llama distinto
 };
 
-// Detecta si el usuario vino desde otra página de tu sitio
-const from = document.referrer;
+// Detecta si el usuario vino desde index.html
+const referrer = document.referrer;
 
-// Si no vino desde tu menú (index.html), ocultá el botón
-if (!from.includes("index.html")) {
-  const boton = document.getElementById("volverMenu");
-  if (boton) {
-    boton.style.display = "none";
+if (!referrer.includes("index.html")) {
+  const botonVolverMenu = document.getElementById("volverMenu");
+  if (botonVolverMenu) {
+    botonVolverMenu.style.display = "none";
   }
 }
+
 
