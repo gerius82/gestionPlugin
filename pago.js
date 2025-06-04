@@ -376,4 +376,8 @@ async function generarComprobantePDF(formData) {
   doc.save(`Comprobante_${formData.alumno.replace(/ /g, "_")}_${formData.mes}.pdf`);
 }
 
+document.getElementById("volverMenu").onclick = () => {
+  const origen = localStorage.getItem("origenMenu") || "index.html";
+  window.location.href = origen;
+};
 
