@@ -214,10 +214,8 @@ document.getElementById("formAsistencia").addEventListener("submit", async funct
 });
 
 document.getElementById("volverMenu").onclick = () => {
-    window.location.href = "index.html"; // Cambiar si el archivo se llama distinto
+  const params = new URLSearchParams(window.location.search);
+  const origen = params.get("from") || "index";
+  window.location.href = `${origen}.html`;
 };
 
-document.getElementById("volverMenu").onclick = () => {
-    const origen = localStorage.getItem("origenMenu") || "index.html";
-    window.location.href = origen;
-};
