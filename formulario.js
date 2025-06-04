@@ -89,7 +89,7 @@ fetch("config.json")
     const url = `${supabaseUrl}/rest/v1/inscripciones?select=turno_1&sede=eq.${encodeURIComponent(sede)}`;
     const res = await fetch(url, { headers });
     const datos = await res.json();
-    
+
   
     // Contar cantidad de inscriptos por turno
     const conteo = {};
@@ -179,4 +179,15 @@ function obtenerFechaLocalISO() {
 document.getElementById("volverMenu").onclick = () => {
   window.location.href = "index.html"; // Cambiar si el archivo se llama distinto
 };
+
+// Detecta si el usuario vino desde otra página de tu sitio
+const from = document.referrer;
+
+// Si no vino desde tu menú (index.html), ocultá el botón
+if (!from.includes("index.html")) {
+  const boton = document.getElementById("volverMenu");
+  if (boton) {
+    boton.style.display = "none";
+  }
+}
 
