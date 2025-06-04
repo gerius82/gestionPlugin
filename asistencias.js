@@ -216,3 +216,8 @@ document.getElementById("formAsistencia").addEventListener("submit", async funct
 document.getElementById("volverMenu").onclick = () => {
     window.location.href = "index.html"; // Cambiar si el archivo se llama distinto
 };
+
+document.getElementById("volverMenu").onclick = () => {
+    const origen = localStorage.getItem("origenMenu") || "index.html";
+    window.location.href = origen;
+};
