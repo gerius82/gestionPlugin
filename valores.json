@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 {
     "cuota_normal": 38000,
     "cuota_promo": 34200,
     "inscripcion_normal": 18000,
     "inscripcion_promo": 9000
   }
-=======
-{
-    "cuota_normal": 38000,
-    "cuota_promo": 34200,
-    "inscripcion_normal": 18000,
-    "inscripcion_promo": 9000
-  }
->>>>>>> cdd0a8e (Primer commit automático)
+  
   

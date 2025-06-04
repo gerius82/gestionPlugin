@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 body {
     font-family: Arial, sans-serif;
     background-color: #f3f3f3;
@@ -20,6 +19,7 @@ body {
     font-weight: bold;
     margin-bottom: 2rem;
   }
+  
   
   label {
     font-weight: 600;
@@ -101,108 +101,4 @@ body {
     display: none;
     margin: 1rem 0 1.5rem 0; /* arriba, derecha, abajo, izquierda */
   }
-=======
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f3f3f3;
-    margin: 0;
-    padding: 1.5rem;
-  }
-  
-  .container {
-    max-width: 500px;
-    margin: auto;
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  h2 {
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 2rem;
-  }
-  
-  label {
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-    display: inline-block;
-  }
-  
-  select, input[type="checkbox"], input[type="radio"] {
-    margin-bottom: 1rem;
-    font-size: 1rem;
-  }
-  
-  select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
-  }
-  
-  .checkbox-linea {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    margin: 1rem 0;
-  }
-  
-  .total {
-    text-align: center;
-    font-size: 1.4rem;
-    margin: 1.5rem 0;
-  }
-  
-  .btn-verde {
-    width: 100%;
-    background-color: #4caf50;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-bottom: 1rem;
-    transition: background 0.2s ease-in-out;
-  }
-  
-  .btn-verde:hover {
-    background-color: #43a047;
-  }
-  
-  .btn-volver {
-    width: 100%;
-    background-color: #bdbdbd;
-    color: #222;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  input[type="checkbox"] {
-    vertical-align: middle;
-  }
-
-  #confirmacionPago {
-    text-align: center;
-    color: green;
-    font-weight: bold;
-    display: none;
-    margin: 1rem 0 1.5rem 0; /* arriba, derecha, abajo, izquierda */
-  }
->>>>>>> cdd0a8e (Primer commit automático)
   

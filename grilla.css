@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 body {
     font-family: Arial, sans-serif;
     padding: 1rem;
@@ -11,6 +10,7 @@ body {
     margin-bottom: 0.5rem;
     font-weight: 600;
     color: #2b2b2b;
+    
   }
   
   .selector-wrapper {
@@ -98,105 +98,4 @@ body {
     background-color: #9e9e9e;
   }
   
-=======
-body {
-    font-family: Arial, sans-serif;
-    padding: 1rem;
-  }
-
-
-  .titulo {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #2b2b2b;
-  }
-  
-  .selector-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .selector-wrapper label {
-    font-weight: 500;
-    font-size: 1rem;
-  }
-  
-  .selector-wrapper select {
-    padding: 6px 12px;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    transition: border 0.2s;
-  }
-  
-  .selector-wrapper select:focus {
-    border-color: #4caf50;
-    outline: none;
-  }
-  
-  .filtro-sede {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  .grilla-matriz {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0.5rem;
-  }
-  .grilla-dia {
-    text-align: center;
-    font-weight: bold;
-  }
-  .grilla-turno {
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 0.5rem;
-    font-size: 14px;
-    background: #e6ffe6;
-    height: 180px;
-    overflow-y: auto;
-  }
-  .grilla-turno.full {
-    background: #ffe6e6;
-  }
-  .grilla-turno h5 {
-    margin: 0 0 0.25rem;
-    font-size: 14px;
-    text-align: center;
-  }
-  .grilla-turno table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .grilla-turno td {
-    padding: 2px 4px;
-    font-size: 13px;
-  }
-  .btn-volver {
-    width: 100%;
-    background-color: #bdbdbd;
-    color: #222;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    transition: background 0.2s ease-in-out;
-    margin-top: 1rem;
-  }
-  
-  .btn-volver:hover {
-    background-color: #9e9e9e;
-  }
-  
->>>>>>> cdd0a8e (Primer commit automático)
   
