@@ -153,6 +153,22 @@ fetch("config.json")
             <button id="volverFormularioFinal" class="btn-volver">Volver</button>
           </div>
         `;
+
+        // Enviar email de confirmación
+          emailjs.init("Vkl0XSUcG-KApScqq"); // tu Public Key actual
+          const templateParams = {
+            email: data.email,
+            resumen: contenido.innerText // o generá un string HTML legible
+          };
+          
+
+          emailjs.send('service_efu6ess', 'template_92ev0wo', templateParams)
+            .then(() => {
+              console.log("Correo enviado correctamente");
+            }, (error) => {
+              console.error("Error al enviar correo:", error);
+            });
+
         document.getElementById("volverFormularioFinal").onclick = () => {
           location.reload(); // vuelve al formulario limpio
         };
@@ -190,6 +206,8 @@ if (!vieneDelMenu) {
     botonVolverMenu.style.display = "none";
   }
 }
+
+
 
 
 
