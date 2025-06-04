@@ -11,7 +11,14 @@ body {
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    
+
+  }
+
+  .logo-plugin {
+    display: block;
+    margin: 0 auto 1rem auto;
+    max-width: 240px;
+    height: auto;
   }
   
   h2 {
