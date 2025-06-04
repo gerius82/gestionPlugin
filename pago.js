@@ -380,4 +380,3 @@ document.getElementById("volverMenu").onclick = () => {
   const origen = localStorage.getItem("origenMenu") || "index.html";
   window.location.href = origen;
 };
-
