@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Menú Profes</title>
+  <link rel="stylesheet" href="menu.css" />
+</head>
+<body>
+  <div class="container">
+    <img src="Logo_Plugin_2025.png" alt="Logo Plugin" class="logo-plugin">
+
+    <div class="menu-group">
+      <h2>Pagos</h2>
+      <!--<a href="pago.html" class="menu-item">Registrar Pago</a> -->
+
+      <a href="pago.html" class="menu-item" onclick="localStorage.setItem('origenMenu', 'menu_profes.html')">Registrar Pago</a>
+
+    </div>
+
+    <div class="menu-group">
+      <h2>Asistencias</h2>
+      <!-- <a href="asistencias.html" class="menu-item">Registrar Asistencias</a> -->
+
+      <a href="asistencias.html" class="menu-item" onclick="localStorage.setItem('origenMenu', 'menu_profes.html')">Registrar Asistencias</a>
+    </div>
+  </div>
+</body>
+</html>
