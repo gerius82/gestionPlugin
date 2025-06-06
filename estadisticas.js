@@ -323,21 +323,20 @@ async function generarComprobantePDF(formData) {
     //doc.save(`Comprobante_${formData.alumno.replace(/ /g, "_")}_${formData.mes}.pdf`);
     const pdfBlob = doc.output("blob");
 
-    if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], "comprobante.pdf", { type: "application/pdf" })] })) {
-    const file = new File([pdfBlob], "comprobante.pdf", { type: "application/pdf" });
-    try {
-        await navigator.share({
-        files: [file],
-        title: "Comprobante de Pago",
-        text: "Te comparto el comprobante de pago generado.",
-        });
-    } catch (err) {
-        alert("El usuario canceló el envío o ocurrió un error.");
-        console.error(err);
-    }
-    } else {
-    // Si no se puede compartir, se descarga el PDF como antes
-    doc.save(`Comprobante_${formData.alumno.replace(/ /g, "_")}_${formData.mes}.pdf`);
+    if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], nombreArchivo, { type: "application/pdf" })] })) {
+        const file = new File([pdfBlob], nombreArchivo, { type: "application/pdf" });
+        try {
+          await navigator.share({
+            files: [file],
+            title: "Comprobante de Pago",
+            text: "Te comparto el comprobante de pago generado.",
+          });
+        } catch (err) {
+          alert("El usuario canceló el envío o ocurrió un error.");
+          console.error(err);
+        }
+      } else {
+        doc.save(nombreArchivo);
     }
 
 }
