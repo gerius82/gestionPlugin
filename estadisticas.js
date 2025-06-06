@@ -322,7 +322,8 @@ async function generarComprobantePDF(formData) {
   
     //doc.save(`Comprobante_${formData.alumno.replace(/ /g, "_")}_${formData.mes}.pdf`);
     const pdfBlob = doc.output("blob");
-
+    const nombreArchivo = `Comprobante_${formData.alumno.replace(/ /g, "_")}_${formData.mes}.pdf`;
+    
     if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], nombreArchivo, { type: "application/pdf" })] })) {
         const file = new File([pdfBlob], nombreArchivo, { type: "application/pdf" });
         try {
