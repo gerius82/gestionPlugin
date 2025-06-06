@@ -320,5 +320,24 @@ async function generarComprobantePDF(formData) {
     doc.setTextColor(150);
     doc.text(`Fecha: ${fechaTxt}`, 85, 132, { align: "right" });
   
+    //doc.save(`Comprobante_${formData.alumno.replace(/ /g, "_")}_${formData.mes}.pdf`);
+    const pdfBlob = doc.output("blob");
+
+    if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], "comprobante.pdf", { type: "application/pdf" })] })) {
+    const file = new File([pdfBlob], "comprobante.pdf", { type: "application/pdf" });
+    try {
+        await navigator.share({
+        files: [file],
+        title: "Comprobante de Pago",
+        text: "Te comparto el comprobante de pago generado.",
+        });
+    } catch (err) {
+        alert("El usuario canceló el envío o ocurrió un error.");
+        console.error(err);
+    }
+    } else {
+    // Si no se puede compartir, se descarga el PDF como antes
     doc.save(`Comprobante_${formData.alumno.replace(/ /g, "_")}_${formData.mes}.pdf`);
+    }
+
 }

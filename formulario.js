@@ -152,9 +152,9 @@ fetch("config.json")
           <div style="text-align:center; margin-top: 1rem;">
             <button id="volverFormularioFinal" class="btn-volver">Volver</button>
           </div>
-        `;
-
-        // Enviar email de confirmación
+         `;
+         
+         // Enviar email de confirmación
           emailjs.init("Vkl0XSUcG-KApScqq"); // tu Public Key actual
           const templateParams = {
             email: data.email,
@@ -167,21 +167,21 @@ fetch("config.json")
               console.log("Correo enviado correctamente");
             }, (error) => {
               console.error("Error al enviar correo:", error);
-            });
-
-        document.getElementById("volverFormularioFinal").onclick = () => {
-          location.reload(); // vuelve al formulario limpio
-        };
-      } else {
+          });
+          
+          document.getElementById("volverFormularioFinal").onclick = () => {
+            location.reload(); // vuelve al formulario limpio
+          };
+        } else {
         contenedor.innerHTML += `<p style="color:red;">Ocurrió un error al enviar la inscripción.</p>`;
       }
     };
   }
     
-    document.getElementById("volverFormulario").onclick = () => {
-      document.getElementById("resumen").style.display = "none";
-      document.querySelector("form").style.display = "block";
-    };
+  document.getElementById("volverFormulario").onclick = () => {
+    document.getElementById("resumen").style.display = "none";
+    document.querySelector("form").style.display = "block";
+  };
     
 });
 
