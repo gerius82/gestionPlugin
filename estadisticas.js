@@ -157,7 +157,7 @@ document.getElementById("ordenPago").addEventListener("click", () => {
   asc = !asc;
   actualizarTabla();
 });
-
+/*
 async function generarComprobanteDesdeEstadisticas(alumnoId, mes) {
     // Buscar datos del alumno
     const resAlumno = await fetch(`${supabaseUrl}/rest/v1/inscripciones?id=eq.${alumnoId}&select=nombre,apellido,telefono,tiene_promo`, {
@@ -214,9 +214,59 @@ async function generarComprobanteDesdeEstadisticas(alumnoId, mes) {
       medio: pago.medio_pago
     });
 }
+*/
 
-
-
+async function generarComprobanteDesdeEstadisticas(alumnoId, mes) {
+    // Cargar datos completos del alumno
+    const resAlumno = await fetch(`${supabaseUrl}/rest/v1/inscripciones?id=eq.${alumnoId}&select=*`, {
+      headers: headers()
+    });
+    const [alumno] = await resAlumno.json();
+    if (!alumno) {
+      alert("Alumno no encontrado.");
+      return;
+    }
+  
+    // Cargar datos del pago
+    const resPago = await fetch(`${supabaseUrl}/rest/v1/pagos?alumno_id=eq.${alumnoId}&mes=eq.${mes}&pago_mes=eq.true&select=medio_pago,pago_inscripcion,monto_total`, {
+      headers: headers()
+    });
+    const [pago] = await resPago.json();
+    if (!pago) {
+      alert("No se encontró información de pago.");
+      return;
+    }
+  
+    let montoTotal = pago.monto_total;
+    let nombreCompleto = `${alumno.nombre} ${alumno.apellido}`;
+  
+    // Buscar hermano si hay promoción y teléfono en común
+    if (alumno.tiene_promo) {
+      const hermanos = todosLosAlumnos.filter(a =>
+        a.id !== alumnoId &&
+        a.telefono === alumno.telefono &&
+        a.tiene_promo
+      );
+  
+      if (hermanos.length > 0) {
+        const hermano = hermanos[0];
+        // Mostrar: Juan y Pedro Pérez
+        nombreCompleto = `${alumno.nombre} y ${hermano.nombre} ${alumno.apellido}`;
+        montoTotal *= 2;
+      }
+    }
+  
+    await generarComprobantePDF({
+      alumno: nombreCompleto,
+      total: montoTotal,
+      mes,
+      pagaMes: true,
+      pagaInscripcion: pago.pago_inscripcion,
+      tienePromo: alumno.tiene_promo,
+      medio: pago.medio_pago
+    });
+}
+  
 
 
 
@@ -323,7 +373,7 @@ async function generarComprobantePDF(formData) {
     //doc.save(`Comprobante_${formData.alumno.replace(/ /g, "_")}_${formData.mes}.pdf`);
     const pdfBlob = doc.output("blob");
     const nombreArchivo = `Comprobante_${formData.alumno.replace(/ /g, "_")}_${formData.mes}.pdf`;
-    
+
     if (navigator.canShare && navigator.canShare({ files: [new File([pdfBlob], nombreArchivo, { type: "application/pdf" })] })) {
         const file = new File([pdfBlob], nombreArchivo, { type: "application/pdf" });
         try {
