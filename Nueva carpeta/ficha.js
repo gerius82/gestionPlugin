@@ -43,37 +43,24 @@ function formatearFechaArgentina(fechaISO) {
     return new Intl.DateTimeFormat('es-AR', opciones).format(fecha);
 }
   
-function generarMesesDesdeInscripcion(fechaStr) {
+function generarMesesDesdeInscripcion(fechaInscripcion) {
     const nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
                      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-  
-    const [añoStr, mesStr] = fechaStr.split("-");
-    const añoInicio = parseInt(añoStr, 10);
-    const mesInicio = parseInt(mesStr, 10) - 1; // JS usa 0-indexado
-  
+    const inicio = new Date(fechaInscripcion);
     const hoy = new Date();
-    const añoHoy = hoy.getFullYear();
-    const mesHoy = hoy.getMonth();
-  
     const meses = [];
   
-    let año = añoInicio;
-    let mes = mesInicio;
+    let actual = new Date(inicio.getFullYear(), inicio.getMonth(), 1);
   
-    while (año < añoHoy || (año === añoHoy && mes <= mesHoy)) {
-      const nombreMes = nombres[mes];
-      meses.push(nombreMes);
-      mes++;
-      if (mes > 11) {
-        mes = 0;
-        año++;
-      }
+    while (actual <= hoy) {
+      const nombreMes = nombres[actual.getMonth()];
+      const mesTexto = nombreMes; // e.g. "Mayo"
+      meses.push(mesTexto);
+      actual.setMonth(actual.getMonth() + 1);
     }
   
     return meses;
 }
-  
-  
   
 
 function generarFechasEsperadas(mes, turno) {
@@ -159,7 +146,7 @@ async function actualizarVinculoPromocion(id) {
         .catch(console.error);
 }
 
-async function mostrarFicha(alumno) {
+function mostrarFicha(alumno) {
     if (!alumno) return;
   
     document.getElementById("fichaAlumno").style.display = "block";
@@ -194,31 +181,6 @@ async function mostrarFicha(alumno) {
   
     chk.checked = alumno.tiene_promo;
     chk.disabled = true;
-
-    const listaPagos = document.getElementById("listaPagosPorMes");
-    if (listaPagos) {
-        listaPagos.innerHTML = "";
-        const inicio = new Date(alumno.creado_en);
-        //const referencia = new Date("2025-05-01");
-        const referencia = new Date(2025, 4, 1); // mayo es MES 4 (0-indexed)
-
-
-        const desde = inicio < referencia ? referencia : inicio;
-        //const meses = generarMesesDesdeInscripcion(desde.toISOString());
-        const año = desde.getFullYear();
-        const mes = (desde.getMonth() + 1).toString().padStart(2, '0');
-        const fechaInicio = `${año}-${mes}-01`;
-        const meses = generarMesesDesdeInscripcion(fechaInicio);
-
-        for (const mes of meses.reverse()) {
-            const pagado = await verificarPagoMes(alumno.id, mes);
-            const li = document.createElement("li");
-            li.textContent = `${mes}: ${pagado ? "✅ Pagado" : "❌ Sin pago"}`;
-            li.className = pagado ? "pago-verde" : "pago-rojo";
-            listaPagos.appendChild(li);
-        }
-    }
-
   
     if (alumno.tiene_promo && alumno.beneficiario_id) {
       const otro = todosLosAlumnos.find(a => a.id === alumno.beneficiario_id);
