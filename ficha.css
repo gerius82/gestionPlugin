@@ -79,36 +79,9 @@ body {
     font-weight: bold;
   }
   
-  /* Tabla de asistencias */
-  .tabla-asistencias {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-  }
   
-  .tabla-asistencias th, .tabla-asistencias td {
-    border: 1px solid #ccc;
-    padding: 6px;
-    text-align: center;
-  }
   
-  .tabla-asistencias th {
-    background-color: #f0f0f0;
-  }
   
-  /* Lista dinámica */
-  #listaRecuperadores li {
-    background: #e6ffe6;
-    padding: 4px 8px;
-    border-radius: 4px;
-    margin-bottom: 4px;
-    cursor: pointer;
-  }
-  
-  #listaRecuperadores li:hover {
-    background-color: #ffdada;
-    text-decoration: line-through;
-  }
   
   /* Edición en línea */
   .campo-editable {

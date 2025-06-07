@@ -170,7 +170,7 @@ function mostrarFicha(alumno) {
     }
   
     const turnoEl = document.getElementById("turnoTexto");
-    if (turnoEl) turnoEl.textContent = alumno.turno_1?.trim().replace(/hs$/, '') ?? '';
+    if (turnoEl) turnoEl.textContent = alumno.turno_1?.trim() ?? '';
   
     // Promo
     const chk = document.getElementById("tienePromo");
@@ -198,41 +198,7 @@ function mostrarFicha(alumno) {
       selectBenef.innerHTML = '';
     }
   
-    // Asistencias
-    const meses = generarMesesDesdeInscripcion(alumno.creado_en);
-    const selMes = document.getElementById("mes");
-    selMes.innerHTML = "";
-    meses.reverse().forEach(m => selMes.appendChild(new Option(m, m)));
-  
-    selMes.onchange = async () => {
-      const turno = alumno.turno_1?.trim().replace(/hs$/, '');
-      const { desde, hasta } = obtenerRangoFechas(selMes.value);
-      const asistencias = await fetchAsistencias(alumno.id, desde, hasta);
-
-      const esperadas = generarFechasEsperadas(selMes.value, turno);
-  
-      const presentes = asistencias.filter(a => a.tipo === "regular").map(a => a.fecha);
-      const recuperadas = asistencias.filter(a => a.tipo === "recuperacion").map(a => a.fecha);
-      const faltas = esperadas.filter(f => !presentes.includes(f));
-  
-      const pagado = await verificarPagoMes(alumno.id, selMes.value);
-        document.getElementById("estadoPago").innerHTML = `
-        <p class="${pagado ? 'pago-verde' : 'pago-rojo'}">${pagado ? 'Pagado' : 'Sin pago registrado'}</p>`;
-
-  
-      document.getElementById("asistenciasResumen").innerHTML = `
-        <p><strong>Fechas esperadas:</strong> ${esperadas.length}</p>
-        <p><strong>Asistencias:</strong> ${presentes.length}</p>
-        <p><strong>Recuperaciones:</strong> ${recuperadas.length}</p>
-        <p><strong>Faltas:</strong> ${faltas.length}</p>
-        <table class="tabla-asistencias">
-          <tr><th>Fecha</th><th>Estado</th></tr>
-          ${esperadas.map(f => `<tr><td>${f}</td><td>${presentes.includes(f) ? 'Presente' : 'Ausente'}</td></tr>`).join("")}
-        </table>`;
-    };
-  
-    selMes.dispatchEvent(new Event("change"));
-}
+    }
   
    
    
@@ -491,7 +457,7 @@ document.getElementById("modoEdicionFicha").onclick = () => {
       });
       span.replaceWith(select);
     }
-  
+    
     let turnoActual = "";
     let turnoSpan = document.getElementById("turnoTexto");
 
@@ -515,7 +481,7 @@ document.getElementById("modoEdicionFicha").onclick = () => {
 
     const selectTurno = document.createElement("select");
     selectTurno.id = "turnoEdit";
-  
+
     const turnos = [
       "Lunes 14:30 a 16:00hs", "Lunes 16:30 a 18:00hs", "Lunes 18:30 a 20:00hs",
       "Martes 09:30 a 11:00hs", "Martes 16:30 a 18:00hs", "Martes 18:30 a 20:00hs",
@@ -525,7 +491,10 @@ document.getElementById("modoEdicionFicha").onclick = () => {
       "Sábado 09:00 a 10:30hs", "Sábado 11:00 a 12:30hs"
     ];
     turnos.forEach(t => {
-      const opt = new Option(t, t, false, t === turnoActual);
+      const opt = new Option(t, t);
+      if (t.trim() === turnoActual.trim()) {
+        opt.selected = true;
+      }
       selectTurno.appendChild(opt);
     });
     turnoSpan.replaceWith(selectTurno);
