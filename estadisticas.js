@@ -99,40 +99,60 @@ async function actualizarTabla() {
             span.textContent = "Sí";
           
             const btn = document.createElement("button");
-            btn.textContent = "📄";
-            btn.className = "btn-mini";
-            btn.style.marginLeft = "8px";
+            //btn.textContent = "📄";
+            //btn.className = "btn-mini";
+            btn.className = "boton-icono boton-comprobante";
+            //btn.textContent = "📄";
+            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path d="M4 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V5.5L9.5 1H4zm5 1.5L13 6h-3a1 1 0 0 1-1-1V2.5zM4 9.5A.5.5 0 0 1 4.5 9h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 9.5zm0 2a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
+            </svg>`;
+
+            btn.title = "Ver comprobante de pago";
+
+            btn.style.marginLeft = "10px";
             btn.onclick = () => generarComprobanteDesdeEstadisticas(a.id, mes);
           
             pagoTd.appendChild(span);
             pagoTd.appendChild(btn);
           } else {
-            pagoTd.textContent = "No";
-          
             if (a.telefono) {
-              const mesTexto = document.getElementById("mes").value;
-              const tel = "54" + a.telefono.replace(/\D/g, ""); // solo números
-              const msg = encodeURIComponent(
-                `Hola, cómo estás? Notamos que todavía no tenemos registro del pago de la cuota correspondiente a ${mesTexto}. Si ya lo realizaste, quizás se nos pasó registrarlo. Nos podrías confirmar? Gracias! y disculpas por la molestia...`
-              );
-              const url = `https://wa.me/${tel}?text=${msg}`;
-          
-              const btn = document.createElement("a");
-              btn.href = url;
-              btn.target = "_blank";
-              btn.textContent = "Recordar 💬";
-              btn.className = "boton-wpp";
-              btn.style.marginLeft = "10px";
-
-              // Crear contenedor en línea
+                const mesTexto = document.getElementById("mes").value;
+                const tel = "54" + a.telefono.replace(/\D/g, "");
+                const msg = encodeURIComponent(
+                  `Hola, cómo estás? Notamos que todavía no tenemos registro del pago de la cuota correspondiente a ${mesTexto}. Si ya lo realizaste, quizás se nos pasó registrarlo. Nos podrías confirmar? Gracias! y disculpas por la molestia...`
+                );
+                const url = `https://wa.me/${tel}?text=${msg}`;
+              
                 const contenedor = document.createElement("span");
                 contenedor.style.display = "inline-flex";
                 contenedor.style.alignItems = "center";
-                contenedor.appendChild(document.createTextNode("No"));
+                contenedor.style.gap = "6px";
+              
+                const texto = document.createElement("span");
+                texto.textContent = "No";
+                texto.style.color = "red";
+                texto.style.fontWeight = "bold";
+              
+                const btn = document.createElement("a");
+                btn.href = url;
+                btn.target = "_blank";
+                //btn.textContent = "💬";
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                viewBox="0 0 16 16">
+                <path d="M13.601 2.326A7.955 7.955 0 0 0 8 0C3.582 0 0 3.582 0 8c0 1.425.375 2.748 1.03 3.914L0 16l4.188-1.03A7.963 7.963 0 0 0 8 16c4.418 0 8-3.582 8-8 0-2.137-.832-4.089-2.399-5.674zM8 14.5a6.5 6.5 0 1 1 4.401-11.074l.19.185A6.495 6.495 0 0 1 8 14.5z"/>
+                <path d="M11.168 9.29c-.228-.114-1.348-.667-1.556-.743-.207-.077-.358-.114-.51.114-.152.228-.586.743-.72.895-.133.152-.266.171-.494.057-.228-.114-.962-.354-1.83-1.13-.676-.602-1.133-1.347-1.267-1.575-.133-.228-.014-.352.1-.466.103-.102.228-.266.342-.399.115-.133.152-.228.229-.38.076-.152.038-.285-.019-.399-.058-.114-.51-1.23-.699-1.681-.184-.445-.372-.384-.51-.392-.133-.008-.285-.01-.437-.01-.152 0-.4.057-.61.285-.21.228-.81.792-.81 1.931 0 1.14.83 2.243.945 2.399.114.152 1.63 2.5 3.96 3.494.554.24.984.384 1.32.49.554.176 1.057.152 1.455.092.444-.066 1.348-.551 1.538-1.083.19-.532.19-.99.133-1.083-.057-.095-.209-.152-.437-.266z"/>
+                </svg>`;
+                btn.className = "boton-icono";
+                btn.title = "Recordar por WhatsApp";
+              
+                contenedor.appendChild(texto);
                 contenedor.appendChild(btn);
-          
-              pagoTd.appendChild(btn);
-            }
+                pagoTd.appendChild(contenedor);
+              } else {
+                pagoTd.textContent = "No";
+              }
+              
         }
         
         fila.appendChild(nombreTd);
