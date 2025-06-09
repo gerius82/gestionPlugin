@@ -21,8 +21,8 @@ fetch("valores.json")
 
 
 async function cargarAlumnos() {
-    const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?select=id,nombre,apellido,telefono,tiene_promo`, {
-      headers: headers()
+    const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=id,nombre,apellido,telefono,tiene_promo`, {
+        headers: headers()
     });
     todosLosAlumnos = await res.json();
     actualizarTabla();

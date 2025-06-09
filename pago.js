@@ -23,7 +23,8 @@ const headers = () => ({
 });
 
 async function fetchAlumnos() {
-  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?select=id,nombre,apellido,telefono,tiene_promo,beneficiario_id`, {
+  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=id,nombre,apellido,telefono,tiene_promo,beneficiario_id`, {
+
     headers: headers()
   });
   return await res.json();

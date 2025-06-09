@@ -17,13 +17,22 @@ const headers = () => ({
   apikey: supabaseKey,
   Authorization: `Bearer ${supabaseKey}`
 });
-
+/*
 async function fetchAlumnos() {
   const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?select=responsable,email,curso,sede,id,nombre,apellido,turno_1,creado_en,telefono,beneficiario_id,tiene_promo,escuela,edad`, {
     headers: headers()
   });
   return await res.json();
 }
+*/
+
+async function fetchAlumnos() {
+    const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=responsable,email,curso,sede,id,nombre,apellido,turno_1,creado_en,telefono,beneficiario_id,tiene_promo,escuela,edad`, {
+      headers: headers()
+    });
+    return await res.json();
+}
+  
 
 async function fetchAsistencias(id, desde, hasta) {
   const res = await fetch(`${supabaseUrl}/rest/v1/asistencias?alumno_id=eq.${id}&fecha=gte.${desde}&fecha=lte.${hasta}`, {
@@ -236,7 +245,7 @@ async function mostrarFicha(alumno) {
       selectBenef.innerHTML = '';
     }
   
-    }
+}
   
    
    
@@ -385,7 +394,7 @@ document.getElementById("guardarFicha").onclick = async () => {
 };
   
   
-  
+ /* 
 document.getElementById("eliminarAlumno").onclick = async () => {
     const alumnoId = document.getElementById("alumno").value;
     if (!alumnoId) return;
@@ -421,7 +430,61 @@ document.getElementById("eliminarAlumno").onclick = async () => {
     document.getElementById("fichaAlumno").style.display = "none";
     alert("Alumno eliminado correctamente.");
 };
+ */
+
+document.getElementById("eliminarAlumno").onclick = async () => {
+    const alumnoId = document.getElementById("alumno").value;
+    if (!alumnoId) return;
   
+    const alumno = todosLosAlumnos.find(a => a.id == alumnoId);
+    if (!confirm(`¿Estás seguro de marcar como inactivo a ${alumno.nombre} ${alumno.apellido}? Esta acción ocultará al alumno pero no borrará sus datos.`)) return;
+  
+    const headersConfig = {
+      ...headers(),
+      "Content-Type": "application/json",
+      "prefer": "return=representation"
+    };
+  
+    // 1. Desvincular a cualquier alumno que lo tenga como beneficiario
+    const otrosVinculados = todosLosAlumnos.filter(a => a.beneficiario_id === alumnoId);
+    for (const otro of otrosVinculados) {
+      await fetch(`${supabaseUrl}/rest/v1/inscripciones?id=eq.${otro.id}`, {
+        method: "PATCH",
+        headers: headersConfig,
+        body: JSON.stringify({ tiene_promo: false, beneficiario_id: null })
+      });
+    }
+  
+    // 2. Desvincular al propio alumno si él también tiene beneficiario
+    if (alumno.beneficiario_id) {
+      await fetch(`${supabaseUrl}/rest/v1/inscripciones?id=eq.${alumnoId}`, {
+        method: "PATCH",
+        headers: headersConfig,
+        body: JSON.stringify({ tiene_promo: false, beneficiario_id: null })
+      });
+    }
+  
+    // 3. Marcar como inactivo (borrado lógico)
+    const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?id=eq.${alumnoId}`, {
+      method: "PATCH",
+      headers: headersConfig,
+      body: JSON.stringify({ activo: false })
+    });
+  
+    if (!res.ok) {
+      const errorText = await res.text();
+      alert(`Error al marcar como inactivo: ${res.status} - ${errorText}`);
+      return;
+    }
+  
+    // 4. Refrescar lista y ocultar ficha
+    todosLosAlumnos = await fetchAlumnos();
+    cargarSelectorAlumnos(todosLosAlumnos);
+    document.getElementById("fichaAlumno").style.display = "none";
+    alert("Alumno marcado como inactivo correctamente.");
+};
+   
+
 document.getElementById("modoEdicionFicha").onclick = () => {
     const alumnoId = document.getElementById("alumno").value;
     const alumno = todosLosAlumnos.find(a => a.id == alumnoId);
@@ -564,4 +627,5 @@ function obtenerRangoFechas(mesTexto) {
       hasta: hasta.toISOString().slice(0, 10)
     };
 }
-   
+
+

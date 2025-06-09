@@ -37,7 +37,8 @@ const asignacionDeTurnos = {
 
 
 async function fetchInscripciones() {
-  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?select=nombre,apellido,edad,sede,turno_1,creado_en&order=creado_en`, {
+  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=nombre,apellido,edad,sede,turno_1,creado_en&order=creado_en`, {
+
     headers: {
       apikey: supabaseKey,
       Authorization: `Bearer ${supabaseKey}`

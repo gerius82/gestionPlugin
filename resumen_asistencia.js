@@ -73,7 +73,8 @@ async function cargarResumenAsistencias() {
     if (sedeSel) filtro += `&sede=eq.${encodeURIComponent(sedeSel)}`;
     if (turnoSel) filtro += `&turno_1=eq.${encodeURIComponent(turnoSel)}`;
   
-    const alumnosRes = await fetch(`${supabaseUrl}/rest/v1/inscripciones?select=id,nombre,apellido,turno_1,sede${filtro}`, {
+    const alumnosRes = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=id,nombre,apellido,turno_1,sede${filtro}`, {
+
       headers: headers()
     });
     const alumnos = await alumnosRes.json();

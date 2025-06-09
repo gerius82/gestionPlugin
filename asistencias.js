@@ -36,11 +36,12 @@ const headers = () => ({
 });
 
 async function fetchAlumnos() {
-  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?select=id,nombre,apellido,sede,turno_1,curso,creado_en`, {
-    headers: headers()
-  });
-  return await res.json();
+    const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=id,nombre,apellido,sede,turno_1,curso,creado_en`, {
+      headers: headers()
+    });
+    return await res.json();
 }
+  
 
 function turnoCompleto(dia, horario) {
   return `${dia} ${horario}`;
