@@ -245,6 +245,47 @@ async function mostrarFicha(alumno) {
       selectBenef.innerHTML = '';
     }
   
+    const btnWA = document.getElementById("btnWhatsAppInscripcion");
+    if (btnWA) {
+      // Verificamos si ya pagó la inscripción
+      const resPago = await fetch(`${supabaseUrl}/rest/v1/pagos?alumno_id=eq.${alumno.id}&pago_inscripcion=is.true`, {
+        headers: headers()
+      });
+      const pagos = await resPago.json();
+      const yaPagoInscripcion = pagos.length > 0;
+    
+      if (yaPagoInscripcion) {
+        btnWA.classList.add("inactiva");
+        btnWA.textContent = "Inscripción completada ✅";
+        btnWA.removeAttribute("href");
+      } else {
+        const nombreCompleto = `${alumno.nombre} ${alumno.apellido}`;
+        const mensaje = encodeURIComponent(`¡Hola ${nombreCompleto}! 👋
+    
+    Te comparto los datos para completar la inscripción:
+    
+    💲 Monto: $18.000
+    🏦 Alias: plugin.robotica
+    👤 Titular: Germán Iusto
+    
+    ¡Muchas gracias por confiar en nosotros! 🙌
+    Cualquier duda, estoy a disposición.
+    
+    ¡Saludos! 😊`);
+        const telefono = alumno.telefono?.replace(/\D/g, '');
+        if (telefono) {
+          btnWA.href = `https://wa.me/54${telefono}?text=${mensaje}`;
+          btnWA.textContent = "Enviar datos de inscripción 📲";
+          btnWA.classList.remove("inactiva");
+        } else {
+          btnWA.style.display = "none";
+        }
+      }
+    
+      btnWA.style.display = "inline-block";
+    }
+    
+    
 }
   
    

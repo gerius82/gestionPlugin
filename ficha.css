@@ -180,6 +180,28 @@ body {
     background-color: #9e9e9e;
   }
 
+  .btn-inscripcion {
+    display: inline-block;
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  .btn-inscripcion:hover {
+    background-color: #43a047;
+  }
+  
+  .btn-inscripcion.inactiva {
+    background-color: #bdbdbd;
+    color: #333;
+    pointer-events: none;
+    cursor: default;
+  }
   
   
    
