@@ -3,40 +3,42 @@ body {
     background: #f9f9f9;
     margin: 0;
     padding: 0;
-}
+  }
   
-.container {
+  .container {
+    width: 95%;
     max-width: 800px;
     margin: 2rem auto;
     background: white;
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 0 10px #ccc;
-}
+    overflow-x: auto;
+  }
   
-h2 {
+  h2 {
     text-align: center;
     margin-bottom: 1.5rem;
-}
+  }
   
-table {
+  table {
     width: 100%;
     border-collapse: collapse;
-}
+  }
   
-thead {
+  thead {
     background: #eee;
-}
+  }
   
-th, td {
+  th, td {
     padding: 10px;
     text-align: left;
     vertical-align: top;
-}
+    min-width: 120px;
+  }
   
-.wa-mensaje {
+  .wa-mensaje {
     width: 100%;
-    min-width: 280px;
     font-size: 0.95rem;
     padding: 8px;
     border-radius: 6px;
@@ -44,46 +46,45 @@ th, td {
     resize: vertical;
     box-sizing: border-box;
     margin-top: 0.5rem;
-}
+  }
   
-.wa-botones {
+  .wa-botones {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     margin-top: 0.5rem;
     flex-wrap: wrap;
-}
+  }
   
-.boton-verde,
-.boton-gris {
-  font-size: 0.95rem;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.boton-verde {
-  background-color: #4caf50;
-  color: white;
-}
-
-.boton-verde:hover {
-  background-color: #43a047;
-}
-
-.boton-gris {
-  background-color: #e0e0e0;
-  color: #333;
-}
-
-.boton-gris:hover {
-  background-color: #bdbdbd;
-}
-
+  .boton-verde,
+  .boton-gris {
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
   
-.btn-volver {
+  .boton-verde {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .boton-verde:hover {
+    background-color: #43a047;
+  }
+  
+  .boton-gris {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+  
+  .boton-gris:hover {
+    background-color: #bdbdbd;
+  }
+  
+  .btn-volver {
     display: inline-block;
     background-color: #666;
     color: white;
@@ -92,33 +93,6 @@ th, td {
     text-decoration: none;
     font-weight: bold;
     margin-top: 2rem;
-}
-  
-@media (max-width: 480px) {
-    body {
-      font-size: 1.05rem;
-      padding: 1rem;
-    }
-  
-    .container {
-      padding: 1rem;
-      width: 100%;
-    }
-  
-    .wa-mensaje {
-      font-size: 1rem;
-      min-height: 140px;
-    }
-  
-    .wa-botones {
-      flex-direction: column;
-      gap: 8px;
-    }
-  
-    .boton-verde,
-    .boton-gris {
-      width: 100%;
-      text-align: center;
-    }
-}
+  }
+   
   
