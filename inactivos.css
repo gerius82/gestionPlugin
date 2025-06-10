@@ -94,3 +94,31 @@ th, td {
     margin-top: 2rem;
 }
   
+@media (max-width: 480px) {
+    body {
+      font-size: 1.05rem;
+      padding: 1rem;
+    }
+  
+    .container {
+      padding: 1rem;
+      width: 100%;
+    }
+  
+    .wa-mensaje {
+      font-size: 1rem;
+      min-height: 140px;
+    }
+  
+    .wa-botones {
+      flex-direction: column;
+      gap: 8px;
+    }
+  
+    .boton-verde,
+    .boton-gris {
+      width: 100%;
+      text-align: center;
+    }
+}
+  
