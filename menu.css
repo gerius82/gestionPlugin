@@ -14,7 +14,7 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
   }
-  
+
   
   h1 {
     color: #333;
@@ -83,4 +83,12 @@ body {
   }
 }
 
+.menu-inactivo {
+    background-color: #ef5350;
+}
+  
+.menu-inactivo:hover {
+    background-color: #e53935;
+}
+  
   

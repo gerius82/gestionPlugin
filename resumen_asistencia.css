@@ -23,7 +23,7 @@ body {
     width: 100%;
     border-collapse: collapse;
   }
-  
+
   
   thead {
     background: #eee;
@@ -76,5 +76,7 @@ body {
   .filtros label {
     font-weight: bold;
   }
+
+
   
   
