@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recuperar una clase</title>
+  <link rel="stylesheet" href="recuperar.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Recuperar una clase</h2>
+
+    <p id="explicacion">
+      En esta sección podés consultar las clases que podés recuperar, ver las ausencias recientes y elegir un turno disponible.
+    </p>
+    <h4>Recordamos:</h4>
+        <ul>
+        <li>✅ Las ausencias justificadas podrán recuperarse en otros turnos según disponibilidad.</li>
+        <li>🚫 Los feriados NO podrán recuperarse.</li>
+        
+        
+        </ul>
+
+    <label for="telefono">Buscar por teléfono:</label>
+    <input type="tel" id="telefono" placeholder="Ej: 3411234567" />
+
+    <button id="buscar">Buscar</button>
+
+    <div id="resultado" style="display: none;">
+      <h3>Alumnos encontrados</h3>
+      <ul id="listaAlumnos"></ul>
+
+      <div id="infoRecuperacion" style="display: none;">
+        <h4>Seleccioná una ausencia para recuperar</h4>
+        <select id="faltaSeleccionada"></select>
+
+
+        <h4>Turnos disponibles para recuperar</h4>
+        <div id="cuadroTurnos"></div>
+
+        <button id="btnWhatsapp" class="boton-verde">Confirmar por WhatsApp</button>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top: 2rem;">
+      <a href="index.html" class="btn-volver">← Volver al Menú</a>
+    </div>
+  </div>
+
+  <script src="recuperar.js"></script>
+</body>
+</html>

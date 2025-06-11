@@ -1,0 +1,138 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f3f3;
+    margin: 0;
+    padding: 1rem;
+  }
+  
+  .container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2, h3, h4 {
+    text-align: center;
+    color: #333;
+    margin-top: 0;
+  }
+  
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 1rem;
+  }
+  
+  input[type="tel"] {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    margin-top: 5px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+  
+  button {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: #43a047;
+  }
+  
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  #listaAlumnos li {
+    padding: 6px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  #cuadroTurnos {
+    margin-top: 1rem;
+  }
+  
+  .turno-opcion {
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .turno-opcion:hover {
+    background: #c8e6c9;
+  }
+  
+  .turno-opcion.seleccionado {
+    background-color: #a5d6a7;
+    font-weight: bold;
+  }
+  
+  .btn-volver {
+    display: inline-block;
+    background-color: #666;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+ul li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin-top: 6px;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23666' d='M4 6l4 4 4-4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+h4 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #444;
+}
+  
+  
+  
+  

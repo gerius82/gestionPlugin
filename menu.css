@@ -91,4 +91,12 @@ body {
     background-color: #e53935;
 }
   
+.menu-recuperar {
+    background-color: #ff9800;
+}
+  
+.menu-recuperar:hover {
+    background-color: #fb8c00;
+}
+  
   
