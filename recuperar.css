@@ -132,6 +132,15 @@ h4 {
     margin-bottom: 0.5rem;
     color: #444;
 }
+
+.no-disponible {
+    background-color: #ffcdd2;
+    border: 1px solid #e57373;
+    color: #444;
+    opacity: 0.8;
+    pointer-events: none;
+}
+  
   
   
   
