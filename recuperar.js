@@ -75,7 +75,7 @@ async function mostrarInfoRecuperacion(alumnoId) {
     });
   }
 
-  
+  /*
   // 🔄 Obtener sede del alumno
 const resAlumno = await fetch(`${supabaseUrl}/rest/v1/inscripciones?id=eq.${alumnoId}&select=sede`, {
     headers: headers()
@@ -112,6 +112,66 @@ const resAlumno = await fetch(`${supabaseUrl}/rest/v1/inscripciones?id=eq.${alum
     div.textContent = turno;
   
     const hayLugar = cantidad < maximo;
+  
+    if (!hayLugar) {
+      div.classList.add("no-disponible");
+      div.style.cursor = "not-allowed";
+      div.style.backgroundColor = "#fce4ec";
+      div.style.border = "1px solid #f8bbd0";
+    } else {
+      div.onclick = () => {
+        document.querySelectorAll(".turno-opcion").forEach(d => d.classList.remove("seleccionado"));
+        div.classList.add("seleccionado");
+      };
+    }
+  
+    cuadro.appendChild(div);
+}
+ */
+
+
+// 🔄 Obtener sede del alumno
+  const resAlumno = await fetch(`${supabaseUrl}/rest/v1/inscripciones?id=eq.${alumnoId}&select=sede`, {
+    headers: headers()
+  });
+  const alumnoData = await resAlumno.json();
+  const sede = alumnoData[0]?.sede;
+  
+  if (!sede) {
+    alert("No se encontró la sede del alumno.");
+    return;
+  }
+  
+  // 🧾 Cargar cupos máximos desde JSON
+  const resCupos = await fetch("turnos.json");
+  const cuposMaximos = await resCupos.json();
+  const turnosSede = Object.keys(cuposMaximos[sede] || {});
+  
+  // 📥 Traer todos los inscriptos activos de esa sede
+  const resInscriptos = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&sede=eq.${encodeURIComponent(sede)}&select=turno_1`, {
+    headers: headers()
+  });
+  const inscriptos = await resInscriptos.json();
+  
+  // 📊 Contar cuántos alumnos hay por turno
+  const conteoPorTurno = {};
+  inscriptos.forEach(i => {
+    const turno = i.turno_1;
+    conteoPorTurno[turno] = (conteoPorTurno[turno] || 0) + 1;
+  });
+  
+  // 🟢 Mostrar turnos
+  const cuadro = document.getElementById("cuadroTurnos");
+  cuadro.innerHTML = "";
+  
+  for (const turno of turnosSede) {
+    const maximo = cuposMaximos[sede][turno];
+    const cantidad = conteoPorTurno[turno] || 0;
+    const hayLugar = cantidad < maximo;
+  
+    const div = document.createElement("div");
+    div.className = "turno-opcion";
+    div.textContent = turno;
   
     if (!hayLugar) {
       div.classList.add("no-disponible");
