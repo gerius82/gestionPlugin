@@ -114,7 +114,7 @@ async function mostrarTurnosDisponibles(alumnos) {
     const nuevoTurno = seleccionado.textContent;
     const mensaje = encodeURIComponent(
       `Solicitud de cambio de turno:\n` +
-      alumnos.map(a => `Alumno: ${a.nombre} ${a.apellido}\nTurno actual: ${a.turno_1}\nNuevo turno: ${nuevoTurno}`).join("\n\n")
+      alumnos.map(a => `👦 Alumno: ${a.nombre} ${a.apellido}\n🕒 Turno actual: ${a.turno_1}\n🆕 Nuevo turno: ${nuevoTurno}`).join("\n\n")
     );
 
     const link = `https://wa.me/543412153057?text=${mensaje}`;
