@@ -19,17 +19,17 @@ document.getElementById("buscar").onclick = async () => {
     return;
   }
 
-  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?telefono=ilike.*${tel}*&select=id,nombre,apellido`, {
+  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?telefono=ilike.*${tel}*&select=id,nombre,apellido,sede,turno_1`, {
     headers: headers()
   });
   const alumnos = await res.json();
 
   const contenedor = document.getElementById("resultado");
   const lista = document.getElementById("listaAlumnos");
-  const infoRecuperacion = document.getElementById("infoRecuperacion");
+  const infoCambio = document.getElementById("infoCambio");
   lista.innerHTML = "";
   contenedor.style.display = alumnos.length ? "block" : "none";
-  infoRecuperacion.style.display = "none";
+  infoCambio.style.display = "none";
 
   if (!alumnos.length) {
     alert("No se encontraron alumnos con ese teléfono.");
@@ -42,82 +42,53 @@ document.getElementById("buscar").onclick = async () => {
     lista.appendChild(li);
   });
 
-  // Por ahora tomamos el primer alumno como referencia
-  const nombresAlumnos = alumnos.map(a => `${a.nombre} ${a.apellido}`).join(", ");
-  await mostrarInfoRecuperacion(alumnos[0].id, nombresAlumnos);
+  await mostrarTurnosDisponibles(alumnos);
 };
 
-async function mostrarInfoRecuperacion(alumnoId,nombresAlumnos) {
-  document.getElementById("infoRecuperacion").style.display = "block";
+async function mostrarTurnosDisponibles(alumnos) {
+  const infoCambio = document.getElementById("infoCambio");
+  infoCambio.style.display = "block";
 
-  // 🔍 Traer ausencias reales
-  const res = await fetch(`${supabaseUrl}/rest/v1/asistencias?alumno_id=eq.${alumnoId}&tipo=eq.ausente&order=fecha.desc&limit=4&select=fecha`, {
-    headers: headers()
+  const turnoActual = document.getElementById("turnoActual");
+  turnoActual.innerHTML = "";
+  const turnosActuales = new Set(alumnos.map(a => a.turno_1));
+
+  turnosActuales.forEach(t => {
+    const li = document.createElement("li");
+    li.textContent = t;
+    turnoActual.appendChild(li);
   });
-  const ausencias = await res.json();
 
-  const selectFalta = document.getElementById("faltaSeleccionada");
-  selectFalta.innerHTML = "";
+  const sede = alumnos[0].sede;
+  const cantidad = alumnos.length;
 
-  if (!ausencias.length) {
-    const opt = document.createElement("option");
-    opt.value = "";
-    opt.textContent = "No hay ausencias registradas";
-    selectFalta.appendChild(opt);
-  } else {
-    ausencias.forEach(a => {
-      const opt = document.createElement("option");
-      const [anio, mes, dia] = a.fecha.split("T")[0].split("-");
-      const formateada = `${parseInt(dia)} de ${obtenerNombreMes(parseInt(mes))}`;
-      opt.value = formateada;
-      opt.textContent = formateada;
-      selectFalta.appendChild(opt);
-    });
-  }
-
-// 🔄 Obtener sede del alumno
-  const resAlumno = await fetch(`${supabaseUrl}/rest/v1/inscripciones?id=eq.${alumnoId}&select=sede`, {
-    headers: headers()
-  });
-  const alumnoData = await resAlumno.json();
-  const sede = alumnoData[0]?.sede;
-  
-  if (!sede) {
-    alert("No se encontró la sede del alumno.");
-    return;
-  }
-  
-  // 🧾 Cargar cupos máximos desde JSON
   const resCupos = await fetch("turnos.json");
   const cuposMaximos = await resCupos.json();
-  const turnosSede = Object.keys(cuposMaximos[sede] || {});
-  
-  // 📥 Traer todos los inscriptos activos de esa sede
+  const turnosSede = Object.keys(cuposMaximos[sede] || {}).filter(t => !turnosActuales.has(t));
+
   const resInscriptos = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&sede=eq.${encodeURIComponent(sede)}&select=turno_1`, {
     headers: headers()
   });
   const inscriptos = await resInscriptos.json();
-  
-  // 📊 Contar cuántos alumnos hay por turno
+
   const conteoPorTurno = {};
   inscriptos.forEach(i => {
     const turno = i.turno_1;
     conteoPorTurno[turno] = (conteoPorTurno[turno] || 0) + 1;
   });
-  
-  // 🟢 Mostrar turnos
+
   const cuadro = document.getElementById("cuadroTurnos");
   cuadro.innerHTML = "";
-  
+
   for (const turno of turnosSede) {
     const maximo = cuposMaximos[sede][turno];
-    const cantidad = conteoPorTurno[turno] || 0;
-    const hayLugar = cantidad < maximo;
-  
+    const actuales = conteoPorTurno[turno] || 0;
+    const hayLugar = (maximo - actuales) >= cantidad;
+
     const div = document.createElement("div");
     div.className = "turno-opcion";
     div.textContent = turno;
-  
+
     if (!hayLugar) {
       div.classList.add("no-disponible");
       div.style.cursor = "not-allowed";
@@ -129,24 +100,21 @@ async function mostrarInfoRecuperacion(alumnoId,nombresAlumnos) {
         div.classList.add("seleccionado");
       };
     }
-  
-    cuadro.appendChild(div);
-}
-  
-  
 
-  // WhatsApp
+    cuadro.appendChild(div);
+  }
+
   document.getElementById("btnWhatsapp").onclick = () => {
-    const falta = selectFalta.value || "sin especificar";
     const seleccionado = document.querySelector(".turno-opcion.seleccionado");
     if (!seleccionado) {
-      alert("Seleccioná un turno antes de confirmar.");
+      alert("Seleccioná un nuevo turno antes de confirmar.");
       return;
     }
 
-    const turno = seleccionado.textContent;
+    const nuevoTurno = seleccionado.textContent;
     const mensaje = encodeURIComponent(
-      `Solicitud de recuperación de clase:\n👤 Solicitante: ${nombresAlumnos}\n❌ Ausencia: ${falta}\n✅ Recupera: ${turno}`
+      `Solicitud de cambio de turno:\n` +
+      alumnos.map(a => `Alumno: ${a.nombre} ${a.apellido}\nTurno actual: ${a.turno_1}\nNuevo turno: ${nuevoTurno}`).join("\n\n")
     );
 
     const link = `https://wa.me/543412153057?text=${mensaje}`;
@@ -154,16 +122,9 @@ async function mostrarInfoRecuperacion(alumnoId,nombresAlumnos) {
   };
 }
 
-function obtenerNombreMes(mes) {
-    const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio",
-                   "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
-    return meses[mes - 1];
-}
-
 document.getElementById("volverMenu").onclick = () => {
     const params = new URLSearchParams(window.location.search);
     const origen = params.get("from") || "index";
     window.location.href = `${origen}.html`;
 };
-  
   

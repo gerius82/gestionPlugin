@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cambio de turno</title>
+  <link rel="stylesheet" href="recuperar.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Solicitar cambio de turno</h2>
+
+    <p>Podés solicitar un cambio de turno si hay disponibilidad en la misma sede.</p>
+
+    <label for="telefono">Buscar por teléfono:</label>
+    <input type="tel" id="telefono" placeholder="Ej: 3411234567" />
+
+    <button id="buscar">Buscar</button>
+
+    <div id="resultado" style="display: none;">
+      <h3>Alumnos encontrados</h3>
+      <ul id="listaAlumnos"></ul>
+
+      <div id="infoCambio" style="display: none;">
+        <h4>Turno actual</h4>
+        <ul id="turnoActual"></ul>
+
+        <h4>Turnos disponibles en la misma sede</h4>
+        <div id="cuadroTurnos"></div>
+
+        <button id="btnWhatsapp" class="boton-verde">Solicitar por WhatsApp</button>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top: 2rem;">
+      <a href="#" id="volverMenu" class="btn-volver">← Volver al Menú</a>
+    </div>
+  </div>
+
+  <script src="cambio_turno.js"></script>
+</body>
+</html>

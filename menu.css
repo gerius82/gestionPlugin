@@ -98,5 +98,15 @@ body {
 .menu-recuperar:hover {
     background-color: #fb8c00;
 }
+
+.menu-cambio {
+    background-color: #64b5f6;
+}
+  
+.menu-cambio:hover {
+    background-color: #42a5f5;
+}
+  
+
   
   
