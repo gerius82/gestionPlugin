@@ -146,7 +146,7 @@ async function mostrarInfoRecuperacion(alumnoId,nombresAlumnos) {
 
     const turno = seleccionado.textContent;
     const mensaje = encodeURIComponent(
-      `Solicitud de recuperación de clase:\n👤 Solicitante: ${nombresAlumnos}\n❌ Ausencia: ${falta}\n✅ Recupera: ${turno}`
+      `_Solicitud de recuperación de clase:_\n👤 *Solicitante:* ${nombresAlumnos}\n❌ *Ausencia:* ${falta}\n✅ *Recupera:* ${turno}`
     );
 
     const link = `https://wa.me/543412153057?text=${mensaje}`;
