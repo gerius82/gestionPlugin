@@ -284,6 +284,38 @@ async function mostrarFicha(alumno) {
     
       btnWA.style.display = "inline-block";
     }
+
+      // Mostrar últimas 4 asistencias con detalle
+  const listaClases = document.getElementById("listaClases");
+  if (listaClases) {
+    listaClases.innerHTML = "";
+    const resAsistencias = await fetch(`${supabaseUrl}/rest/v1/asistencias?alumno_id=eq.${alumno.id}&order=fecha.desc&limit=4&select=fecha,tipo,turno`, {
+      headers: headers()
+    });
+    const asistencias = await resAsistencias.json();
+
+    if (!asistencias.length) {
+      const li = document.createElement("li");
+      li.textContent = "No hay registros de asistencia.";
+      listaClases.appendChild(li);
+    } else {
+      asistencias.forEach(a => {
+        const li = document.createElement("li");
+        const fecha = formatearFechaCorta(a.fecha);
+        const turno = a.turno || alumno.turno_1 || "Turno no especificado";
+        let estado = "";
+
+        if (a.tipo === "regular") estado = "✅ Asistió";
+        else if (a.tipo === "ausente") estado = "❌ Ausente";
+        else if (a.tipo === "recuperacion") estado = "🔁 Recuperación";
+        else estado = "❔ Sin clasificar";
+
+        li.textContent = `${fecha} - ${turno}: ${estado}`;
+        listaClases.appendChild(li);
+      });
+    }
+  }
+
     
     
 }
@@ -669,4 +701,12 @@ function obtenerRangoFechas(mesTexto) {
     };
 }
 
+function formatearFechaCorta(fechaISO) {
+    if (!fechaISO) return "-";
+    const [año, mes, dia] = fechaISO.split("T")[0].split("-");
+    return `${dia}/${mes}/${año}`;
+}
+  
+  
+  
 
