@@ -19,7 +19,7 @@ document.getElementById("buscar").onclick = async () => {
     return;
   }
 
-  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?telefono=ilike.*${tel}*&select=id,nombre,apellido,sede`, {
+  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?telefono=ilike.*${tel}*&select=id,nombre,apellido,sede, turno_1`, {
     headers: headers()
   });
   const alumnos = await res.json();
@@ -62,24 +62,57 @@ async function mostrarInfoRecuperacion(alumnos, sede) {
   });
   const ausencias = await res.json();
 
-  const selectFalta = document.getElementById("faltaSeleccionada");
-  selectFalta.innerHTML = "";
+const fechasIncluidas = new Set();
+const selectFalta = document.getElementById("faltaSeleccionada");
+selectFalta.innerHTML = "";
 
-  if (!ausencias.length) {
-    const opt = document.createElement("option");
-    opt.value = "";
-    opt.textContent = "No hay ausencias registradas";
-    selectFalta.appendChild(opt);
-  } else {
-    ausencias.forEach(a => {
-      const opt = document.createElement("option");
-      const [anio, mes, dia] = a.fecha.split("T")[0].split("-");
-      const formateada = `${parseInt(dia)} de ${obtenerNombreMes(parseInt(mes))}`;
-      opt.value = formateada;
-      opt.textContent = formateada;
-      selectFalta.appendChild(opt);
-    });
+// Agregar ausencias pasadas
+ausencias.forEach(a => {
+  const [anio, mes, dia] = a.fecha.split("T")[0].split("-");
+  const formateada = `${parseInt(dia)} de ${obtenerNombreMes(parseInt(mes))}`;
+  const opt = document.createElement("option");
+  opt.value = formateada;
+  opt.textContent = formateada;
+  selectFalta.appendChild(opt);
+  fechasIncluidas.add(formateada);
+});
+
+// Estimar próxima fecha futura de clase
+let seAgregoFutura = false;
+const turnoAlumno = alumnos[0].turno_1?.toLowerCase(); // Ej: "lunes 18:00"
+if (turnoAlumno) {
+  const dias = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  const hoy = new Date();
+  const [diaNombre] = turnoAlumno.split(" ");
+
+  const diaDeseado = dias.findIndex(d => d === diaNombre);
+  if (diaDeseado !== -1) {
+    const proximaFecha = new Date(hoy);
+    const deltaDias = (diaDeseado - hoy.getDay() + 7) % 7 || 7;
+    proximaFecha.setDate(hoy.getDate() + deltaDias);
+
+    const diaFuturo = proximaFecha.getDate();
+    const mesFuturo = proximaFecha.getMonth() + 1;
+    const formateadaFutura = `${diaFuturo} de ${obtenerNombreMes(mesFuturo)}`;
+
+    if (!fechasIncluidas.has(formateadaFutura)) {
+      const optFutura = document.createElement("option");
+      optFutura.value = formateadaFutura;
+      optFutura.textContent = `${formateadaFutura} (próxima clase)`;
+      selectFalta.appendChild(optFutura);
+      fechasIncluidas.add(formateadaFutura);
+      seAgregoFutura = true;
+    }
   }
+}
+
+// Si no hay ninguna fecha ni futura ni ausencias
+if (ausencias.length === 0 && !seAgregoFutura) {
+  const opt = document.createElement("option");
+  opt.value = "";
+  opt.textContent = "No hay fechas para recuperar";
+  selectFalta.appendChild(opt);
+}
 
   const resCupos = await fetch("turnos.json");
   const cuposMaximos = await resCupos.json();
