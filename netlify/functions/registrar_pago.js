@@ -1,15 +1,11 @@
 export async function handler(event) {
   try {
     const { mensaje } = JSON.parse(event.body || '{}');
-
     const match = mensaje.match(/(.+?) te envió[:\s]*\$?([\d.,]+)/i);
     if (!match) {
       return {
-        statusCode: 400,
-        body: JSON.stringify({
-          error: 'No se pudo extraer nombre o monto',
-          mensaje_recibido: mensaje
-        })
+        statusCode: 200,
+        body: JSON.stringify({ respuesta: 'No se pudo interpretar el mensaje.' })
       };
     }
 
@@ -19,18 +15,13 @@ export async function handler(event) {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        nombre,
-        monto,
-        estado: 'Extraído correctamente'
+        respuesta: `${nombre} pagó $${monto}`
       })
     };
   } catch (e) {
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        error: 'Error inesperado',
-        detalle: e.message
-      })
+      body: JSON.stringify({ respuesta: 'Error interno' })
     };
   }
 }
