@@ -5,15 +5,15 @@ export async function handler(event) {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        mensaje_recibido: mensaje || '[vacío]',
-        nota: 'Así vemos si el mensaje llegó correctamente desde MacroDroid'
+        mensaje_recibido: mensaje || '[mensaje vacío]',
+        nota: '✅ El mensaje llegó correctamente desde MacroDroid'
       })
     };
   } catch (e) {
     return {
       statusCode: 500,
       body: JSON.stringify({
-        error: 'Error inesperado',
+        error: 'Error al procesar el mensaje',
         detalle: e.message
       })
     };
