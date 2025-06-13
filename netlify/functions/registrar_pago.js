@@ -1,17 +1,18 @@
 export async function handler(event) {
   try {
+    const { mensaje } = JSON.parse(event.body);
+
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        mensaje_crudo: event.body,
+        mensaje_recibido: mensaje,
         timestamp: new Date().toISOString()
       })
     };
   } catch (e) {
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Error inesperado', detalle: e.message })
+      statusCode: 400,
+      body: JSON.stringify({ error: "No se pudo interpretar el mensaje." })
     };
   }
 }
