@@ -1,122 +1,103 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-);
-
-function extraerNombreYMonto(texto) {
-  const match = texto.match(/(.+?) te envió[:\s]*\$?([\d.,]+)/i);
-  if (!match) return null;
-  const nombre = match[1].trim();
-  const monto = parseFloat(match[2].replace('.', '').replace(',', '.'));
-  return { nombre, monto };
-}
-
-function esInscripcion(monto) {
-  return monto === 18000 || monto === 9000;
-}
-
-function mesActual() {
-  const now = new Date();
-  return now.toLocaleDateString("es-AR", { month: 'long' }).toLowerCase();
-}
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 export async function handler(event) {
   try {
     const { mensaje } = JSON.parse(event.body || '{}');
-    const datos = extraerNombreYMonto(mensaje);
-    if (!datos) {
+
+    // Extraer nombre y monto
+    const match = mensaje.match(/(.+?) te envió[:\s]*\$?([\d.,]+)/i);
+    if (!match) {
       return {
         statusCode: 400,
         body: JSON.stringify({ error: 'No se pudo extraer nombre o monto', mensaje })
       };
     }
 
-    const { nombre, monto } = datos;
-    const nombreBuscado = nombre.toUpperCase();
+    const nombreDetectado = match[1].trim().toUpperCase();
+    const monto = parseFloat(match[2].replace('.', '').replace(',', '.'));
 
-    const { data: alumnos, error } = await supabase
-      .from('inscripciones')
-      .select('id, nombre, apellido, responsable')
-      .eq('activo', true);
+    // Obtener configuración desde tu archivo público (usado por tus scripts)
+    const configRes = await fetch('https://gestionplugin.netlify.app/config.json');
+    const config = await configRes.json();
+    const supabaseUrl = config.supabaseUrl;
+    const supabaseKey = config.supabaseKey;
 
-    if (error || !alumnos) {
-      return { statusCode: 500, body: JSON.stringify({ error: 'Error al consultar alumnos' }) };
-    }
+    const headers = {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      'Content-Type': 'application/json'
+    };
 
-    const alumno = alumnos.find(a => 
-      a.responsable?.toUpperCase().includes(nombreBuscado)
+    // Buscar alumnos activos
+    const alumnosRes = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=id,nombre,apellido,responsable`, {
+      headers
+    });
+    const alumnos = await alumnosRes.json();
+
+    const alumno = alumnos.find(a =>
+      (a.responsable || '').toUpperCase().includes(nombreDetectado)
     );
 
     if (!alumno) {
       return {
         statusCode: 404,
-        body: JSON.stringify({ error: 'Responsable no encontrado', nombre })
+        body: JSON.stringify({ error: 'No se encontró responsable que coincida', nombreDetectado })
       };
     }
 
-    const tipo = esInscripcion(monto) ? 'inscripcion' : 'cuota';
+    // Determinar tipo de pago
+    const tipo = (monto === 18000 || monto === 9000) ? 'inscripcion' : 'cuota';
     const pago_inscripcion = tipo === 'inscripcion';
     const pago_mes = tipo === 'cuota';
-    const mes = pago_mes ? mesActual() : "N/A";
+    const mes = pago_mes
+      ? new Date().toLocaleDateString("es-AR", { month: 'long' }).toLowerCase()
+      : "N/A";
 
-    // Verificar si ya existe un pago de inscripción o del mes
-    if (pago_inscripcion) {
-      const { data: pagosExistentes } = await supabase
-        .from('pagos')
-        .select('id')
-        .eq('alumno_id', alumno.id)
-        .eq('pago_inscripcion', true);
+    // Verificar si ya existe
+    const chequeoUrl = pago_inscripcion
+      ? `${supabaseUrl}/rest/v1/pagos?alumno_id=eq.${alumno.id}&pago_inscripcion=is.true`
+      : `${supabaseUrl}/rest/v1/pagos?alumno_id=eq.${alumno.id}&pago_mes=is.true&mes=eq.${mes}`;
 
-      if (pagosExistentes && pagosExistentes.length > 0) {
-        return {
-          statusCode: 200,
-          body: JSON.stringify({ mensaje: 'La inscripción ya fue registrada previamente.' })
-        };
-      }
+    const chequeoRes = await fetch(chequeoUrl, { headers });
+    const pagosPrevios = await chequeoRes.json();
+    if (pagosPrevios.length > 0) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          mensaje: `Ya existe un pago registrado para este alumno (${tipo === 'inscripcion' ? 'inscripción' : mes}).`
+        })
+      };
     }
 
-    if (pago_mes) {
-      const { data: pagosExistentes } = await supabase
-        .from('pagos')
-        .select('id')
-        .eq('alumno_id', alumno.id)
-        .eq('pago_mes', true)
-        .eq('mes', mes);
+    // Insertar pago
+    const payload = {
+      alumno_id: alumno.id,
+      pago_mes,
+      pago_inscripcion,
+      mes,
+      medio_pago: "transferencia",
+      monto_total: monto,
+      fecha: new Date().toISOString()
+    };
 
-      if (pagosExistentes && pagosExistentes.length > 0) {
-        return {
-          statusCode: 200,
-          body: JSON.stringify({ mensaje: `El mes de ${mes} ya fue registrado previamente.` })
-        };
-      }
-    }
+    const insertRes = await fetch(`${supabaseUrl}/rest/v1/pagos`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload)
+    });
 
-    // Insertar el nuevo pago
-    const { error: insertError } = await supabase
-      .from('pagos')
-      .insert([{
-        alumno_id: alumno.id,
-        pago_mes,
-        pago_inscripcion,
-        mes,
-        medio_pago: "transferencia",
-        monto_total: monto,
-        fecha: new Date().toISOString()
-      }]);
-
-    if (insertError) {
+    if (!insertRes.ok) {
+      const errText = await insertRes.text();
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: 'Error al registrar el pago.', detalle: insertError.message })
+        body: JSON.stringify({ error: 'Error al guardar el pago', detalle: errText })
       };
     }
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        mensaje: '✅ Pago registrado',
+        estado: '✅ Pago registrado',
         alumno: `${alumno.nombre} ${alumno.apellido}`,
         responsable: alumno.responsable,
         tipo,
@@ -127,7 +108,7 @@ export async function handler(event) {
   } catch (e) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Error interno', detalle: e.message })
+      body: JSON.stringify({ error: 'Error inesperado', detalle: e.message })
     };
   }
 }
