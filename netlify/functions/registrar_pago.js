@@ -1,27 +1,29 @@
 export async function handler(event) {
-    try {
-      const { mensaje } = JSON.parse(event.body || '{}');
-  
-      return {
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
-        body: JSON.stringify({
-          recibido: mensaje || '[mensaje vacío]',
-          estado: 'OK',
-          timestamp: new Date().toISOString()
-        })
-      };
-    } catch (e) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          error: 'Error al procesar la solicitud',
-          detalle: e.message
-        })
-      };
-    }
+  const log = {
+    raw: event.body,
+    parsed: null
+  };
+
+  try {
+    const body = JSON.parse(event.body);
+    log.parsed = body;
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        recibido: body.mensaje || '[sin mensaje]',
+        raw: event.body,
+        timestamp: new Date().toISOString()
+      })
+    };
+  } catch (e) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: 'Error al procesar JSON',
+        detalle: e.message,
+        log
+      })
+    };
   }
-  
+}
