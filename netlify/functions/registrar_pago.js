@@ -2,30 +2,26 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 
 export async function handler(event) {
   try {
-    // 🛠 Manejo robusto del JSON, ya sea string o objeto
+    // 🛡 Parsear el JSON de forma segura
     let mensaje = '';
-    if (typeof event.body === 'string') {
-      const parsed = JSON.parse(event.body || '{}');
-      mensaje = parsed.mensaje;
-    } else if (typeof event.body === 'object' && event.body.mensaje) {
-      mensaje = event.body.mensaje;
-    } else {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'No se pudo extraer el mensaje del evento', raw: event.body })
-      };
+    const raw = event.body;
+
+    try {
+      mensaje = JSON.parse(raw).mensaje;
+    } catch (err) {
+      const m = raw.match(/"mensaje"\s*:\s*"([\s\S]*?)"/);
+      mensaje = m ? m[1].replace(/\n/g, ' ').trim() : '';
     }
 
     if (!mensaje) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Mensaje vacío o no válido' })
+        body: JSON.stringify({ error: 'Mensaje vacío o inválido', recibido: raw })
       };
     }
 
-    // 🧠 Extraer datos de la última línea de la notificación
-    const ultimaLinea = mensaje.split('\n').pop().trim();
-    const match = ultimaLinea.match(/(.+?) te envió[:\s]*\$?([\d.,]+)/i);
+    // 🧠 Extraer nombre y monto con expresión flexible
+    const match = mensaje.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑa-záéíóúñ\s]+?) te env[ií]o[:\s]*\$?([\d.,]+)/i);
     if (!match) {
       return {
         statusCode: 400,
