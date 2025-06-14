@@ -2,7 +2,7 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 
 export async function handler(event) {
   try {
-    // 🛡 Parsear el JSON de forma segura
+    // 🛡 Parsear JSON con tolerancia
     let mensaje = '';
     const raw = event.body;
 
@@ -20,8 +20,11 @@ export async function handler(event) {
       };
     }
 
-    // 🧠 Extraer nombre y monto con expresión flexible
-    const match = mensaje.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑa-záéíóúñ\s]+?) te env[ií]o[:\s]*\$?([\d.,]+)/i);
+    // 🧽 Buscar línea útil y extraer nombre + monto
+    const lineas = mensaje.trim().split('\n');
+    const lineaUtil = lineas.find(l => l.toLowerCase().includes('te env')) || mensaje;
+
+    const match = lineaUtil.match(/([A-ZÁÉÍÓÚÑa-záéíóúñ\s]+?) te env[ií]o[:\s]*\$?([\d.,]+)/i);
     if (!match) {
       return {
         statusCode: 400,
@@ -36,7 +39,7 @@ export async function handler(event) {
     const pago_mes = tipo === 'cuota';
     const mes = pago_mes ? new Date().toLocaleDateString("es-AR", { month: 'long' }).toLowerCase() : "N/A";
 
-    // 🔑 Obtener config desde tu sitio
+    // 🔑 Obtener configuración
     const configRes = await fetch('https://gestionplugin.netlify.app/config.json');
     const config = await configRes.json();
     const supabaseUrl = config.supabaseUrl;
@@ -48,7 +51,7 @@ export async function handler(event) {
       'Content-Type': 'application/json'
     };
 
-    // 🎓 Buscar alumno por responsable
+    // 🔍 Buscar alumno por responsable
     const alumnosRes = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=id,nombre,apellido,responsable`, { headers });
     const alumnos = await alumnosRes.json();
 
@@ -63,7 +66,7 @@ export async function handler(event) {
       };
     }
 
-    // 🧾 Verificar si ya existe ese pago
+    // 🔁 Verificar si ya existe el pago
     const chequeoUrl = pago_inscripcion
       ? `${supabaseUrl}/rest/v1/pagos?alumno_id=eq.${alumno.id}&pago_inscripcion=is.true`
       : `${supabaseUrl}/rest/v1/pagos?alumno_id=eq.${alumno.id}&pago_mes=is.true&mes=eq.${mes}`;
@@ -80,7 +83,7 @@ export async function handler(event) {
       };
     }
 
-    // 💾 Insertar el nuevo pago
+    // 💾 Insertar el pago
     const payload = {
       alumno_id: alumno.id,
       pago_mes,
