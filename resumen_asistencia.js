@@ -82,7 +82,7 @@ async function cargarResumenAsistencias() {
   
     // Lanzar todas las consultas en paralelo
     const asistenciaPromises = alumnos.map(a =>
-      fetch(`${supabaseUrl}/rest/v1/asistencias?alumno_id=eq.${a.id}&select=tipo&order=fecha.desc&limit=10`, {
+      fetch(`${supabaseUrl}/rest/v1/asistencias?alumno_id=eq.${a.id}&select=tipo,fecha&order=fecha.desc&limit=10`, {
         headers: headers()
       }).then(res => res.json())
     );
@@ -109,6 +109,7 @@ async function cargarResumenAsistencias() {
         if (r.tipo === "regular") sq.classList.add("verde");
         else if (r.tipo === "ausente") sq.classList.add("rojo");
         else if (r.tipo === "recuperacion") sq.classList.add("azul");
+        sq.title = new Date(r.fecha).toLocaleDateString("es-AR");  // Tooltip con fecha
         tdRegistro.appendChild(sq);
       });
   
