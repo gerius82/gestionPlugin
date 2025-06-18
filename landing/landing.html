@@ -47,15 +47,31 @@
       padding: 1rem;
       border-radius: 8px;
       box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      flex-wrap: wrap;
     }
     .course img {
-      width: 260px;
+      width: 100%;
+      max-width: 260px;
       height: auto;
       border-radius: 8px;
       flex-shrink: 0;
     }
     .course-text {
-      flex: 1;
+      flex: 1 1 250px;
+    }
+    @media (max-width: 768px) {
+      .course {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.2rem 1rem;
+      }
+      .course img {
+        max-width: 80%;
+        margin: 0 auto;
+      }
+      .course-text {
+        padding-top: 1rem;
+      }
     }
     .gallery {
       display: grid;
@@ -192,12 +208,10 @@
       <cite>Rosana Schiera • 18 oct 2019</cite>
     </blockquote>
   </div>
-  
 
   <div class="cta">
     <a href="../formulario.html">Inscribite ahora</a>
   </div>
 
-  
 </body>
 </html>
