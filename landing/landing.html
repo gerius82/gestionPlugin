@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Talleres de Robótica - Instituto Plugin</title>
-  <link rel="stylesheet" href="formulario.css">
+  <link rel="stylesheet" href="../formulario.css">
   <style>
     .hero {
       text-align: center;
@@ -19,6 +19,9 @@
       font-size: 1.2rem;
       margin-top: 1rem;
       color: #444;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .section {
       max-width: 800px;
@@ -36,16 +39,54 @@
       gap: 1.5rem;
     }
     .course {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
       background: #fff;
       padding: 1rem;
       border-radius: 8px;
       box-shadow: 0 0 6px rgba(0,0,0,0.1);
     }
+    .course img {
+      width: 260px;
+      height: auto;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .course-text {
+      flex: 1;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .gallery img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
     .testimonios {
-      font-style: italic;
       color: #555;
-      text-align: center;
-      margin-top: 1rem;
+      margin-top: 2rem;
+    }
+    .testimonios blockquote {
+      margin: 1rem auto;
+      background: #f9f9f9;
+      padding: 1rem;
+      border-left: 4px solid #25d366;
+      border-radius: 4px;
+    }
+    .testimonios cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-style: normal;
+      font-weight: bold;
+      color: #333;
     }
     .cta {
       text-align: center;
@@ -67,36 +108,96 @@
 </head>
 <body>
   <div class="hero">
-    <img src="Logo_Plugin_2025.png" alt="Logo Plugin" class="logo-plugin">
+    <img src="../Logo_Plugin_2025.png" alt="Logo Plugin" class="logo-plugin">
     <h1>¡Descubrí el mundo de la Robótica!</h1>
-    <p>Incentivá la creatividad, el pensamiento lógico y la resolución de problemas en los chicos con nuestros talleres.</p>
+    <p>En un mundo cada vez más tecnológico, que los chicos aprendan robótica no es un lujo, ¡es una necesidad! Nuestros talleres están diseñados para despertar la creatividad, fomentar la lógica, el trabajo en equipo y el pensamiento crítico desde temprana edad. ¡No dejes que tu hijo/a se quede afuera del futuro!</p>
   </div>
 
   <div class="section">
     <h2>¿Qué ofrecemos?</h2>
     <div class="courses">
       <div class="course">
-        <h3>Robótica Básica</h3>
-        <p>Ideal para quienes se inician en el mundo de la robótica. Aprenden conceptos fundamentales jugando y creando.</p>
+        <img src="../img/IMG_20210731_125614124.jpg" alt="Niños en clase de Robótica Básica">
+        <div class="course-text">
+          <h3>Robótica Básica</h3>
+          <p>Ideal para quienes se inician en el mundo de la robótica. Aprenden conceptos fundamentales jugando y creando sus primeros robots. Potenciamos su curiosidad natural y les damos herramientas para explorarla.</p>
+        </div>
       </div>
       <div class="course">
-        <h3>Robótica Avanzada</h3>
-        <p>Para estudiantes con experiencia previa. Se enfrentan a nuevos desafíos técnicos y proyectos complejos.</p>
+        <img src="../img/IMG_20201107_122518531.jpg" alt="Niños programando robots avanzados">
+        <div class="course-text">
+          <h3>Robótica Avanzada</h3>
+          <p>Para estudiantes con experiencia previa. Se enfrentan a nuevos desafíos técnicos, estructuras más complejas y programación avanzada. Ideal para quienes quieren ir un paso más allá.</p>
+        </div>
       </div>
       <div class="course">
-        <h3>Programación con Scratch</h3>
-        <p>Desde los 8 años. Aprenden a programar de forma visual y divertida, desarrollando juegos y animaciones.</p>
+        <img src="../img/Usando-programacion-Scratch-con-juegos-de-estrategias-scaled.webp" alt="Niños usando Scratch">
+        <div class="course-text">
+          <h3>Programación con Scratch</h3>
+          <p>Desde los 8 años. Aprenden a programar de forma visual y divertida, desarrollando videojuegos, animaciones e historias interactivas. Perfecto para introducirlos al mundo de la programación.</p>
+        </div>
+      </div>
+      <div class="course">
+        <img src="../img/arduino_robotica_programacion.jpg" alt="Taller de Robótica y Arduino">
+        <div class="course-text">
+          <h3>Robótica y Programación con Arduino</h3>
+          <p>Para chicos y chicas a partir de los 12 años. Aprenden a construir y programar proyectos con Arduino, integrando sensores, motores y controladores. Desarrollan soluciones reales aplicando electrónica y pensamiento computacional.</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="section testimonios">
-    <p>"Mi hijo nunca estuvo tan entusiasmado con aprender. Cada clase es una aventura para él."</p>
-    <p>"Es increíble ver cómo los chicos logran crear robots funcionales y entender su lógica."</p>
+  <div class="section">
+    <h2>Momentos de nuestros talleres</h2>
+    <div class="gallery">
+      <img src="../img/IMG_20191123_105519855.jpg" alt="Taller de robótica 1">
+      <img src="../img/IMG_20210814_124804440.jpg" alt="Taller de robótica 2">
+      <img src="../img/IMG_20210821_123629111.jpg" alt="Taller de robótica 3">
+      <img src="../img/IMG_20210729_185206356.jpg" alt="Taller de robótica 4">
+    </div>
   </div>
 
-  <div class="cta">
-    <a href="formulario.html">Inscribite ahora</a>
+  <div class="section testimonios">
+    <h2>Lo que dicen las familias</h2>
+    <blockquote>
+      Excelente lugar para que los niños desplieguen todo su potencial para desarrollar diferentes proyectos con legos. Mí hijo de 5 años está feliz! Le encanta armar helicópteros, ventiladores, grúas. Lo recomiendo. ☺️
+      <cite>Luciana Yannazzo • 4 jun 2024</cite>
+    </blockquote>
+    <blockquote>
+      Un buen proyecto para niños! Mi nieto de seis re feliz. Las docentes muy agradables.
+      <cite>Marcela Patricia Gutierrez • 10 ago 2023</cite>
+    </blockquote>
+    <blockquote>
+      Muy buen lugar para los niños. Mi hijo disfruta mucho las clases.
+      <cite>Luciana Usenky • 20 oct 2019</cite>
+    </blockquote>
+    <blockquote>
+      Este es el tercer año que mi hijo va a las clases de robótica y le encanta. Los profes super agradables y cálidos con los chicos. Super recomendable.
+      <cite>Andrea Ambrogio • 18 oct 2019</cite>
+    </blockquote>
+    <blockquote>
+      Feliz mi hijo con robótica. Muy buena experiencia. Puede recuperar clases. Recomendable 100%
+      <cite>Carlos Tassi • 18 oct 2019</cite>
+    </blockquote>
+    <blockquote>
+      Hermoso lugar para que los chicos puedan aprender y entretenerse en el mundo nuevo de la robótica.
+      <cite>Maria Amparo • 18 oct 2019</cite>
+    </blockquote>
+    <blockquote>
+      Mi hijo Manu va hace 2 años le encanta ir y siempre viene muy contento y sorprendido de todo lo que aprenden... Los profes unos genios!
+      <cite>Paula Sabato • 18 oct 2019</cite>
+    </blockquote>
+    <blockquote>
+      Excelente propuesta para los niños y niñas! Gracias!!
+      <cite>Rosana Schiera • 18 oct 2019</cite>
+    </blockquote>
   </div>
+  
+
+  <div class="cta">
+    <a href="../formulario.html">Inscribite ahora</a>
+  </div>
+
+  
 </body>
 </html>
