@@ -45,7 +45,7 @@ body {
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: none;
   }
   
   button:hover {

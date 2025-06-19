@@ -86,7 +86,7 @@ fetch("config.json")
     if (!cuposMaximos[sede]) return;
   
     // Traer todos los inscriptos de esa sede
-    const url = `${supabaseUrl}/rest/v1/inscripciones?select=turno_1&sede=eq.${encodeURIComponent(sede)}`;
+    const url = `${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=turno_1&sede=eq.${encodeURIComponent(sede)}`;
     const res = await fetch(url, { headers });
     const datos = await res.json();
 
