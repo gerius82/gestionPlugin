@@ -121,6 +121,35 @@
       background-color: #1ebe57;
     }
   </style>
+  <script>
+    async function cargarTurnosYValores() {
+      const turnos = await fetch('../turnos.json').then(r => r.json());
+      const valores = await fetch('../valores.json').then(r => r.json());
+
+      const horariosHtml = Object.entries(turnos).map(([sede, horarios]) => {
+        const items = Object.keys(horarios).map(turno => `<li style="margin-bottom: 0.5rem; padding-left: 1.2em; text-indent: -1.2em;">🔹 ${turno}</li>`).join('');
+        return `
+          <h3 style="color: #007acc; margin-top: 1.5rem;">📍 <strong>Sede ${sede}</strong></h3>
+          <ul style="margin-bottom: 1rem; line-height: 1.6; list-style: none; padding-left: 0;">${items}</ul>
+        `;
+      }).join('');
+
+      const valoresHtml = `
+        <ul style="margin-bottom: 1rem; line-height: 1.6; list-style: none; padding-left: 0;">
+          <li style="margin-bottom: 0.5rem; padding-left: 1.2em; text-indent: -1.2em;">🔹 Inscripción: $${valores.inscripcion_normal}</li>
+          <li style="margin-bottom: 0.5rem; padding-left: 1.2em; text-indent: -1.2em;">🔹 Cuota mensual: $${valores.cuota_normal}</li>
+          <li style="list-style: none; margin-top: 1rem;">
+            <div style="background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px; padding: 0.75rem;">
+              <strong>🎉 Promo Hermanos o Mejores Amigos:</strong><br>
+              Si dos chicos/as se inscriben juntos (hermanos o amigos), cada uno obtiene <strong>10% de descuento</strong> en la cuota mensual y <strong>50% en la inscripción</strong>.
+            </div>
+          </li>
+        </ul>`;
+
+      document.getElementById("horarios-valores").innerHTML = horariosHtml + `<h3 style="color: #25d366; margin-top: 2rem;">💰 <strong>Valores</strong></h3>` + valoresHtml;
+    }
+    window.onload = cargarTurnosYValores;
+  </script>
 </head>
 <body>
   <div class="hero">
@@ -181,7 +210,7 @@
   </div>
 
   
-
+  <!--
   <div class="section" style="background-color: #f0f9ff; border-radius: 8px; padding: 2rem 1rem; box-shadow: 0 0 8px rgba(0,0,0,0.05);">
   <h2 style="text-align: center; color: #2c3e50;">Horarios y Valores</h2>
   <div style="max-width: 800px; margin: 0 auto; font-size: 1rem; color: #333; border: 1px solid #d0e7f9; border-radius: 6px; padding: 1rem; background: #ffffff;">
@@ -203,6 +232,8 @@
       <li style="margin-bottom: 0.5rem; padding-left: 1.2em; text-indent: -1.2em;">🔹 Inscripción: $18.000</li>
       <li style="margin-bottom: 0.5rem; padding-left: 1.2em; text-indent: -1.2em;">🔹 Cuota mensual: $38.000</li>
       <li style="list-style: none; margin-top: 1rem;">
+  
+  
   <div style="background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px; padding: 0.75rem;">
     <strong>🎉 Promo Hermanos o Mejores Amigos:</strong><br>
     Si dos chicos/as se inscriben juntos (hermanos o amigos), cada uno obtiene <strong>10% de descuento</strong> en la cuota mensual y <strong>50% en la inscripción</strong>.
@@ -211,7 +242,13 @@
     </ul>
   </div>
 </div>
-
+-->
+<div class="section" style="background-color: #f0f9ff; border-radius: 8px; padding: 2rem 1rem; box-shadow: 0 0 8px rgba(0,0,0,0.05);">
+  <h2 style="text-align: center; color: #2c3e50;">Horarios y Valores</h2>
+  <div id="horarios-valores" style="max-width: 800px; margin: 0 auto; font-size: 1rem; color: #333; border: 1px solid #d0e7f9; border-radius: 6px; padding: 1rem; background: #ffffff;">
+    <p>Cargando horarios y valores...</p>
+  </div>
+</div>
 <div class="section testimonios">
   <h2>Lo que dicen las familias</h2>
   <blockquote>
