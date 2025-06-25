@@ -28,13 +28,20 @@ async function cargarAlumnos() {
     actualizarTabla();
 }
   
-
-async function cargarPagosPorMes(mes) {
-  const res = await fetch(`${supabaseUrl}/rest/v1/pagos?select=alumno_id,mes,pago_mes&mes=eq.${mes}&pago_mes=eq.true`, {
-    headers: headers()
-  });
-  return await res.json();
+async function cargarPagosPorMes(mes, medio = "todos") {
+    let filtro = `mes=eq.${mes}&pago_mes=eq.true`;
+    if (medio !== "todos") {
+      filtro += `&medio_pago=eq.${medio}`;
+    }
+  
+    const res = await fetch(`${supabaseUrl}/rest/v1/pagos?select=alumno_id,mes,pago_mes,medio_pago&${filtro}`, {
+      headers: headers()
+    });
+  
+    return await res.json();
 }
+  
+  
 
 function cargarMeses() {
   const meses = [
@@ -52,14 +59,42 @@ function cargarMeses() {
 
 async function actualizarTabla() {
     const mes = document.getElementById("mes").value;
-    const pagos = await cargarPagosPorMes(mes);
-    const pagados = new Set(pagos.map(p => p.alumno_id));
+    const medio = document.getElementById("medioPago").value;
+
+    const pagos = await cargarPagosPorMes(mes,medio);
+    // const pagados = new Set(pagos.map(p => p.alumno_id));
+    const pagados = new Map(); // Mapear ID del alumno a medio de pago
+
+    pagos.forEach(p => {
+        pagados.set(p.alumno_id, p.medio_pago);
+    });
+
+    let alumnos = [];
+
+    if (medio === "todos") {
+        alumnos = [...todosLosAlumnos].map(a => ({
+            ...a,
+            pago: pagados.has(a.id),
+            medio_pago: pagados.get(a.id) || null
+        }));
+    } else {
+        // Solo mostrar los que pagaron con el medio seleccionado
+        alumnos = todosLosAlumnos
+            .filter(a => pagados.has(a.id))
+            .map(a => ({
+                ...a,
+                pago: true,
+                medio_pago: pagados.get(a.id)
+            }));
+    }
+    /*
+
   
     const alumnos = [...todosLosAlumnos].map(a => ({
       ...a,
       pago: pagados.has(a.id)
     }));
-  
+    */
     if (ordenActual === "nombre") {
       alumnos.sort((a, b) =>
         asc
@@ -73,7 +108,7 @@ async function actualizarTabla() {
           : Number(a.pago) - Number(b.pago)
       );
     }
-  
+    
     // Contador de pagos
     const cantidadPagados = alumnos.filter(a => a.pago).length;
     const cantidadNoPagados = alumnos.length - cantidadPagados;
@@ -177,6 +212,9 @@ document.getElementById("ordenPago").addEventListener("click", () => {
   asc = !asc;
   actualizarTabla();
 });
+
+document.getElementById("medioPago").addEventListener("change", actualizarTabla);
+
 /*
 async function generarComprobanteDesdeEstadisticas(alumnoId, mes) {
     // Buscar datos del alumno

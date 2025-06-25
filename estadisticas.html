@@ -12,6 +12,13 @@
 
     <label for="mes">Seleccionar Mes:</label>
     <select id="mes"></select>
+    <label for="medioPago">Filtrar por medio de pago:</label>
+    <select id="medioPago">
+    <option value="todos">Todos</option>
+    <option value="efectivo">Efectivo</option>
+    <option value="transferencia">Transferencia</option>
+    </select>
+
     <div id="resumenPagos" style="display:flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
         <div style="color: green; font-weight: bold;">Pagados: <span id="contadorPagados">0</span></div>
         <div style="color: red; font-weight: bold;">Faltan pagar: <span id="contadorNoPagados">0</span></div>
