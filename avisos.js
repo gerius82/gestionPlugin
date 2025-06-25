@@ -34,7 +34,11 @@ document.getElementById("guardar").onclick = () => {
     return;
   }
 
-  alumnosActivos.forEach(a => {
+  //alumnosActivos.forEach(a => {
+    alumnosActivos
+    .slice()
+    .sort((a, b) => a.nombre.localeCompare(b.nombre))
+    .forEach(a => {
     const li = document.createElement("li");
     const tel = a.telefono?.replace(/\D/g, "");
     if (!tel) return;
