@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumen Mensual</title>
+  <link rel="stylesheet" href="menu.css">
+  <style>
+    .estadistica {
+      background: #f2f2f2;
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    .estadistica h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Resumen Mensual 📊</h1>
+    <div id="contenedor-estadisticas">
+      <div class="estadistica"><h3>Inscripciones nuevas:</h3><p id="nuevos"></p></div>
+      <div class="estadistica"><h3>Inactivaciones:</h3><p id="inactivos"></p></div>
+      <div class="estadistica"><h3>Total pagado:</h3><p id="totalPagado"></p></div>
+      <div class="estadistica"><h3>Equivalente en alumnos:</h3><p id="equivalenteAlumnos"></p></div>
+      <div class="estadistica"><h3>Alumnos activos sin pago del mes:</h3><p id="sinPago"></p></div>
+      <div class="estadistica"><h3>Total activos:</h3><p id="totalActivos"></p></div>
+      <div class="estadistica"><h3>Distribución:</h3><p id="activosPromo"></p></div>
+
+      
+    </div>
+    <div style="margin-top: 2rem;">
+      <a href="index.html" class="menu-item">⬅ Volver al menú principal</a>
+    </div>
+  </div>
+  <script src="resumen_mensual.js"></script>
+
+</body>
+</html>
