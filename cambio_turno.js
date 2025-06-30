@@ -104,7 +104,7 @@ async function mostrarTurnosDisponibles(alumnos) {
     cuadro.appendChild(div);
   }
 
-  document.getElementById("btnWhatsapp").onclick = () => {
+  document.getElementById("btnWhatsapp").onclick = async () => {
     const seleccionado = document.querySelector(".turno-opcion.seleccionado");
     if (!seleccionado) {
       alert("Seleccioná un nuevo turno antes de confirmar.");
@@ -112,6 +112,20 @@ async function mostrarTurnosDisponibles(alumnos) {
     }
 
     const nuevoTurno = seleccionado.textContent;
+
+    // 🔄 Actualización en Supabase
+    for (const alumno of alumnos) {
+        await fetch(`${supabaseUrl}/rest/v1/inscripciones?id=eq.${alumno.id}`, {
+          method: "PATCH",
+          headers: {
+            ...headers(),
+            "Content-Type": "application/json",
+            "prefer": "return=representation"
+          },
+          body: JSON.stringify({ turno_1: nuevoTurno })
+        });
+    }
+
     const mensaje = encodeURIComponent(
       `_Solicitud de cambio de turno:_\n` +
       alumnos.map(a => `👤 *Alumno:* ${a.nombre} ${a.apellido}\n🕒 *Turno actual:* ${a.turno_1}\n🆕 *Nuevo turno:* ${nuevoTurno}`).join("\n\n")
