@@ -158,7 +158,20 @@ fetch("config.json")
           emailjs.init("Vkl0XSUcG-KApScqq"); // tu Public Key actual
           const templateParams = {
             email: data.email,
-            resumen: contenido.innerText // o generá un string HTML legible
+            nombre: data.nombre,
+            apellido: data.apellido,
+            edad: data.edad,
+            escuela: data.escuela,
+            responsable: data.responsable,
+            telefono: data.telefono,
+            email: data.email,
+            sede: data.sede,
+            curso: data.curso,
+            turno_1: data.turno_1,
+            turno_2: data.turno_2,
+            comentarios: data.comentarios,
+            lista_espera: data.lista_espera ? 'Sí' : 'No',
+            
           };
           
 
