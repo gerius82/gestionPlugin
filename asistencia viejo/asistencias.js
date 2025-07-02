@@ -124,39 +124,27 @@ function actualizarListaRecuperadores() {
     
 }
   
-async function guardarAsistencia(fecha, turno, sede) {
-  const presentesIds = [...document.querySelectorAll("input[name='presente']:checked")].map(el => el.value);
-  const todosIds = [...document.querySelectorAll("input[name='presente']")].map(el => el.value);
-  const ausentesIds = todosIds.filter(id => !presentesIds.includes(id));
-
-  const registrosIniciales = [
-    ...presentesIds.map(id => ({ alumno_id: id, fecha, turno, sede, tipo: "regular" })),
-    ...recuperadores.map(a => ({ alumno_id: a.id, fecha, turno, sede, tipo: "recuperacion" })),
-    ...ausentesIds.map(id => ({ alumno_id: id, fecha, turno, sede, tipo: "ausente" }))
-  ];
-
-  // Consultar asistencias ya existentes en esa fecha
-  const res = await fetch(`${supabaseUrl}/rest/v1/asistencias?fecha=eq.${fecha}&select=alumno_id`, {
-    headers: headers()
-  });
-  const existentes = await res.json();
-  const yaRegistrados = new Set(existentes.map(r => r.alumno_id));
-
-  // Filtrar los que ya tienen asistencia ese día
-  const registros = registrosIniciales.filter(r => !yaRegistrados.has(r.alumno_id));
-
-  console.log("Registrando asistencias nuevas:", registros);
-
-  return Promise.all(registros.map(reg => {
-    return fetch(`${supabaseUrl}/rest/v1/asistencias`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...headers()
-      },
-      body: JSON.stringify(reg)
-    });
-  }));
+function guardarAsistencia(fecha, turno, sede) {
+    const presentesIds = [...document.querySelectorAll("input[name='presente']:checked")].map(el => el.value);
+    const todosIds = [...document.querySelectorAll("input[name='presente']")].map(el => el.value);
+    const ausentesIds = todosIds.filter(id => !presentesIds.includes(id));
+  
+    const registros = [
+      ...presentesIds.map(id => ({ alumno_id: id, fecha, turno, sede, tipo: "regular" })),
+      ...recuperadores.map(a => ({ alumno_id: a.id, fecha, turno, sede, tipo: "recuperacion" })),
+      ...ausentesIds.map(id => ({ alumno_id: id, fecha, turno, sede, tipo: "ausente" }))
+    ];
+  
+    return Promise.all(registros.map(reg => {
+      return fetch(`${supabaseUrl}/rest/v1/asistencias`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...headers()
+        },
+        body: JSON.stringify(reg)
+      });
+    }));
 }
   
 

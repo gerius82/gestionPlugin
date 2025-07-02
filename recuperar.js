@@ -175,7 +175,7 @@ if (ausencias.length === 0 && !seAgregoFutura) {
     input.onchange = renderTurnos;
   });
 
-  document.getElementById("btnWhatsapp").onclick = () => {
+  document.getElementById("btnWhatsapp").onclick = async () => {
     const falta = selectFalta.value || "sin especificar";
     const seleccionado = document.querySelector(".turno-opcion.seleccionado");
     if (!seleccionado) {
@@ -198,6 +198,33 @@ if (ausencias.length === 0 && !seAgregoFutura) {
 
     const link = `https://wa.me/543412153057?text=${mensaje}`;
     window.open(link, "_blank");
+
+    // Si la fecha seleccionada NO es futura, se actualiza como recuperada
+    if (!falta.toLowerCase().includes("próxima")) {
+        const alumnosSeleccionados = Array.from(document.querySelectorAll("#listaAlumnos input:checked"))
+        .map(el => el.dataset.id);
+    
+        const fechaOriginal = convertirFechaTextoAISO(falta); // "10 de junio" → "2025-06-10"
+    
+        for (const alumnoId of alumnosSeleccionados) {
+        const resBuscar = await fetch(`${supabaseUrl}/rest/v1/asistencias?alumno_id=eq.${alumnoId}&fecha=eq.${fechaOriginal}&tipo=eq.ausente&select=id`, {
+            headers: headers()
+        });
+        const [registro] = await resBuscar.json();
+        if (registro?.id) {
+            await fetch(`${supabaseUrl}/rest/v1/asistencias?id=eq.${registro.id}`, {
+            method: "PATCH",
+            headers: {
+                ...headers(),
+                "Content-Type": "application/json",
+                "prefer": "return=representation"
+            },
+            body: JSON.stringify({ tipo: "recuperacion" })
+            });
+        }
+        }
+    }
+  
   };
 }
 
@@ -212,3 +239,16 @@ document.getElementById("volverMenu").onclick = () => {
   const origen = params.get("from") || "index";
   window.location.href = `${origen}.html`;
 };
+
+function convertirFechaTextoAISO(texto) {
+    const partes = texto.split(" ");
+    const dia = partes[0].padStart(2, '0');
+    const mesTexto = partes[2];
+    const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+                   "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+    const mes = (meses.indexOf(mesTexto.toLowerCase()) + 1).toString().padStart(2, '0');
+    const hoy = new Date();
+    const año = hoy.getFullYear();
+    return `${año}-${mes}-${dia}`;
+  }
+  
