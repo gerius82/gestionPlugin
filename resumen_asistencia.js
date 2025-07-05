@@ -109,7 +109,9 @@ async function cargarResumenAsistencias() {
         if (r.tipo === "regular") sq.classList.add("verde");
         else if (r.tipo === "ausente") sq.classList.add("rojo");
         else if (r.tipo === "recuperacion") sq.classList.add("azul");
-        sq.title = new Date(r.fecha).toLocaleDateString("es-AR");  // Tooltip con fecha
+        // sq.title = new Date(r.fecha).toLocaleDateString("es-AR");  // Tooltip con fecha
+        sq.title = r.fecha.split("T")[0].split("-").reverse().join("/");
+
         tdRegistro.appendChild(sq);
       });
   
