@@ -56,10 +56,17 @@ async function mostrarInfoRecuperacion(alumnos, sede) {
   document.getElementById("infoRecuperacion").style.display = "block";
 
   const ids = alumnos.map(a => a.id);
-
+  /*
   const res = await fetch(`${supabaseUrl}/rest/v1/asistencias?alumno_id=in.(${ids.join(",")})&tipo=eq.ausente&order=fecha.desc&limit=4&select=fecha`, {
     headers: headers()
   });
+  */
+
+  const res = await fetch(`${supabaseUrl}/rest/v1/asistencias?alumno_id=in.(${ids.join(",")})&tipo=eq.ausente&recuperada=is.false&order=fecha.desc&limit=4&select=fecha`, {
+    headers: headers()
+  });
+  
+
   const ausencias = await res.json();
 
 const fechasIncluidas = new Set();
@@ -193,38 +200,74 @@ if (ausencias.length === 0 && !seAgregoFutura) {
     }
 
     const mensaje = encodeURIComponent(
-      `_Solicitud de recuperación de clase:_\n👤 *Solicitante:* ${nombres.join(", \n👤 *Solicitante:* ")}\n❌ *Ausencia:* ${falta}\n✅ *Recupera:* ${turno}`
+      `_Solicitud de recuperación de clase:_\n` +
+      `👤 *Solicitante:* ${nombres.join("\n👤 *Solicitante:* ")}\n` +
+      `❌ *Ausencia:* ${falta}\n` +
+      `✅ *Recupera:* ${turno}`
     );
 
     const link = `https://wa.me/543412153057?text=${mensaje}`;
     window.open(link, "_blank");
 
-    // Si la fecha seleccionada NO es futura, se actualiza como recuperada
-    if (!falta.toLowerCase().includes("próxima")) {
-        const alumnosSeleccionados = Array.from(document.querySelectorAll("#listaAlumnos input:checked"))
-        .map(el => el.dataset.id);
-    
-        const fechaOriginal = convertirFechaTextoAISO(falta); // "10 de junio" → "2025-06-10"
-    
-        for (const alumnoId of alumnosSeleccionados) {
-        const resBuscar = await fetch(`${supabaseUrl}/rest/v1/asistencias?alumno_id=eq.${alumnoId}&fecha=eq.${fechaOriginal}&tipo=eq.ausente&select=id`, {
-            headers: headers()
+    const alumnosSeleccionados = Array.from(document.querySelectorAll("#listaAlumnos input:checked"));
+    const fechaFaltaISO = convertirFechaTextoAISO(falta);
+    const turnoRecuperacion = seleccionado.textContent;
+
+    for (const alumno of alumnosSeleccionados) {
+      const alumnoId = alumno.dataset.id;
+
+      if (!falta.toLowerCase().includes("próxima")) {
+        const resBuscar = await fetch(`${supabaseUrl}/rest/v1/asistencias?alumno_id=eq.${alumnoId}&fecha=eq.${fechaFaltaISO}&tipo=eq.ausente&select=id`, {
+          headers: headers()
         });
         const [registro] = await resBuscar.json();
         if (registro?.id) {
-            await fetch(`${supabaseUrl}/rest/v1/asistencias?id=eq.${registro.id}`, {
+          await fetch(`${supabaseUrl}/rest/v1/asistencias?id=eq.${registro.id}`, {
             method: "PATCH",
             headers: {
-                ...headers(),
-                "Content-Type": "application/json",
-                "prefer": "return=representation"
+              ...headers(),
+              "Content-Type": "application/json",
+              "prefer": "return=representation"
             },
-            body: JSON.stringify({ tipo: "recuperacion" })
-            });
+            body: JSON.stringify({ recuperada: true })
+          });
         }
-        }
+      } else {
+        const fechaProximaISO = convertirFechaTextoAISO(falta);
+        await fetch(`${supabaseUrl}/rest/v1/asistencias`, {
+          method: "POST",
+          headers: {
+            ...headers(),
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            alumno_id: alumnoId,
+            fecha: fechaProximaISO,
+            tipo: "ausente",
+            recuperada: true,
+            turno: alumnos[0].turno_1,
+            sede: alumnos[0].sede
+          })
+        });
+      }
+
+      const fechaHoy = new Date().toISOString().split("T")[0];
+
+      await fetch(`${supabaseUrl}/rest/v1/asistencias`, {
+        method: "POST",
+        headers: {
+          ...headers(),
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          alumno_id: alumnoId,
+          fecha: fechaHoy,
+          tipo: "recuperacion",
+          turno: turnoRecuperacion,
+          sede: alumnos[0].sede
+        })
+      });
     }
-  
   };
 }
 
