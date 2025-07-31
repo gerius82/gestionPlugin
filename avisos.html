@@ -9,6 +9,12 @@
 <body>
   <div class="container">
     <h2>Enviar aviso personalizado</h2>
+    <label for="ordenarPor">Ordenar por:</label>
+    <select id="ordenarPor" class="selector-orden">
+      <option value="fecha">Fecha de inscripción (más reciente primero)</option>
+      <option value="fecha_asc">Fecha de inscripción (más antigua primero)</option>
+      <option value="nombre">Nombre (A-Z)</option>
+    </select>
     <textarea id="mensaje" rows="6" placeholder="Escribí el aviso..."></textarea>
     <div style="margin-top: 1rem;">
       <button id="guardar" class="boton-verde">Guardar</button>

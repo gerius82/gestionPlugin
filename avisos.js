@@ -18,7 +18,7 @@ const headers = () => ({
 });
 
 async function fetchAlumnosActivos() {
-  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=nombre,apellido,telefono`, {
+  const res = await fetch(`${supabaseUrl}/rest/v1/inscripciones?activo=eq.true&select=nombre,apellido,telefono,creado_en`, {
     headers: headers()
   });
   return await res.json();
@@ -33,17 +33,27 @@ document.getElementById("guardar").onclick = () => {
     alert("Escribí un mensaje primero.");
     return;
   }
+  const criterio = document.getElementById("ordenarPor").value;
 
   //alumnosActivos.forEach(a => {
     alumnosActivos
     .slice()
-    .sort((a, b) => a.nombre.localeCompare(b.nombre))
+    .sort((a, b) => {
+      if (criterio === "fecha_desc") {
+        return new Date(b.creado_en) - new Date(a.creado_en); // más reciente primero
+      } else if (criterio === "fecha_asc") {
+        return new Date(a.creado_en) - new Date(b.creado_en); // más antigua primero
+      } else if (criterio === "nombre") {
+        return a.nombre.localeCompare(b.nombre);
+      }
+      return 0;
+    })
     .forEach(a => {
     const li = document.createElement("li");
     const tel = a.telefono?.replace(/\D/g, "");
     if (!tel) return;
 
-    const mensajePersonalizado = `Hola ${a.nombre}, ${mensajeBase}`;
+    const mensajePersonalizado = `${mensajeBase}`;
     const url = `https://wa.me/54${tel}?text=${encodeURIComponent(mensajePersonalizado)}`;
 
     const btn = document.createElement("a");
